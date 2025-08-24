@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   useAudioPlayer,
   useAudioPlayerStatus,
@@ -9,6 +9,8 @@ import {
 const AudioPlayerContext = createContext<{
   player: ReturnType<typeof useAudioPlayer>;
   status: ReturnType<typeof useAudioPlayerStatus>;
+  audiourl: string | null;
+  setAudiourl: React.Dispatch<React.SetStateAction<string | null>>;
 } | null>(null);
 
 export function AudioPlayerProvider({
@@ -16,8 +18,9 @@ export function AudioPlayerProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [audiourl, setAudiourl] = useState<string | null>(null);
   const player = useAudioPlayer({
-    uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    uri: audiourl ?? undefined,
   });
   const status = useAudioPlayerStatus(player);
 
@@ -28,7 +31,9 @@ export function AudioPlayerProvider({
   }, []);
 
   return (
-    <AudioPlayerContext.Provider value={{ player, status }}>
+    <AudioPlayerContext.Provider
+      value={{ player, status, audiourl, setAudiourl }}
+    >
       {children}
     </AudioPlayerContext.Provider>
   );

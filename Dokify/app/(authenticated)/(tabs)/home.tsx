@@ -2,9 +2,15 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { StyleSheet, FlatList, Image, View } from "react-native";
-import audiodata from "../../../assets/audiobooks.json";
+import { useEffect, useState } from "react";
+import { useSharedAudioPlayer } from "@/context/audioprovider";
+import {
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
@@ -19,16 +25,63 @@ type Audiobook = {
   bookmarked: boolean;
 };
 
-const audiobooksData: Audiobook[] = audiodata as Audiobook[];
+// const audiobooksData: Audiobook[] = audiodata as Audiobook[];
 
 const Index = () => {
   const router = useRouter();
   const [audioBooks, setAudioBooks] = useState<Audiobook[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const bookBgColor = useThemeColor(
-    { light: "#000", dark: "#fff" },
+    { light: "#000000", dark: "#ffffff" },
     "background",
   );
   const iconColor = useThemeColor({ light: "#fff", dark: "#000" }, "text");
+  const { setAudiourl, player, status } = useSharedAudioPlayer();
+  const [requestedUrl, setRequestedUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (
+      requestedUrl &&
+      status?.isLoaded &&
+      // FIX: Remove status.audioUrl (diagnostic error: Property 'audioUrl' does not exist on type 'AudioStatus')
+      !status?.playing
+    ) {
+      player.play();
+      setRequestedUrl(null); // Reset after playing
+    }
+  }, [requestedUrl, status, player]);
+
+  // Fetch audiobooks from backend API
+  const fetchAudioBooks = () => {
+    setLoading(true);
+    setError(null);
+    fetch("http://192.168.1.11:8000/getAudioBooks/", {
+      method: "POST",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch audiobooks");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setAudioBooks(data.audiobooks || []);
+        setError(null);
+      })
+      .catch((err) => {
+        setError("Unable to fetch audiobooks. Please try again.");
+        setAudioBooks([]);
+        console.error("Failed to fetch audiobooks:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchAudioBooks();
+  }, []);
 
   return (
     <ThemedView style={styles.container}>
@@ -45,22 +98,35 @@ const Index = () => {
         }
         ListEmptyComponent={
           <ThemedView style={styles.noAudioBooks}>
-            <ThemedText type="subtitle">No Audio Books Found</ThemedText>
-            <ThemedText type="defaultSemiBold">
-              Get Started by creating one!
-            </ThemedText>
-            <ThemedButton
-              title="Create Audio Book"
-              variant="primary"
-              size="small"
-              onPress={() => router.push("/(authenticated)/(tabs)/generate")}
-            />
-            <ThemedButton
-              title="Load Test Data"
-              variant="primary"
-              size="small"
-              onPress={() => setAudioBooks(audiobooksData)}
-            />
+            {error ? (
+              <>
+                <ThemedText type="subtitle" style={{ color: "#ff4444" }}>
+                  {error}
+                </ThemedText>
+                <ThemedButton
+                  title={loading ? "Refreshing..." : "Refresh"}
+                  variant="primary"
+                  size="small"
+                  onPress={fetchAudioBooks}
+                  disabled={loading}
+                />
+              </>
+            ) : (
+              <>
+                <ThemedText type="subtitle">No Audio Books Found</ThemedText>
+                <ThemedText type="defaultSemiBold">
+                  Get Started by creating one!
+                </ThemedText>
+                <ThemedButton
+                  title="Create Audio Book"
+                  variant="primary"
+                  size="small"
+                  onPress={() =>
+                    router.push("/(authenticated)/(tabs)/generate")
+                  }
+                />
+              </>
+            )}
           </ThemedView>
         }
         contentContainerStyle={
@@ -78,12 +144,15 @@ const Index = () => {
               size={24}
               color={iconColor}
             />
-            <Ionicons
-              name="play-circle"
-              size={40}
-              color={iconColor}
+            <TouchableOpacity
               style={styles.playIcon}
-            />
+              onPress={() => {
+                setAudiourl(book.audioUrl);
+                setRequestedUrl(book.audioUrl);
+              }}
+            >
+              <Ionicons name="play-circle" size={40} color={iconColor} />
+            </TouchableOpacity>
             <View style={styles.bookRow}>
               <View style={{ alignItems: "center" }}>
                 <Image
@@ -151,6 +220,8 @@ const Index = () => {
             </View>
           </ThemedView>
         )}
+        refreshing={loading}
+        onRefresh={fetchAudioBooks}
       />
     </ThemedView>
   );

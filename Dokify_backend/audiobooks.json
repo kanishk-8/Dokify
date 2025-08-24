@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "title": "The Art of Coding",
+    "author": "Jane Doe",
+    "duration": "2h 15m",
+    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "description": "A beginner's guide to the world of programming and software development.",
+    "audioUrl": "http://192.168.1.7:8000/audiobook/1.m4a",
+    "bookmarked": false
+  },
+  {
+    "id": "2",
+    "title": "Journey Through Space",
+    "author": "John Smith",
+    "duration": "1h 45m",
+    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "description": "Explore the mysteries of the universe and the wonders of space travel.",
+    "audioUrl": "http://192.168.1.7:8000/audiobook/2.m4a",
+    "bookmarked": true
+  },
+  {
+    "id": "3",
+    "title": "Mindfulness Matters",
+    "author": "Emily Clark",
+    "duration": "3h 10m",
+    "coverImage": "https://covers.openlibrary.org/a/olid/OL229501A-S.jpg",
+    "description": "Techniques and stories to help you live a more mindful and peaceful life.",
+    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+    "bookmarked": false
+  },
+  {
+    "id": "4",
+    "title": "Mindfulness Matters",
+    "author": "Emily Clark",
+    "duration": "3h 10m",
+    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "description": "Techniques and stories to help you live a more mindful and peaceful life.",
+    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+    "bookmarked": true
+  },
+  {
+    "id": "5",
+    "title": "Mindfulness Matters",
+    "author": "Emily Clark",
+    "duration": "3h 10m",
+    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "description": "Techniques and stories to help you live a more mindful and peaceful life.",
+    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+    "bookmarked": false
+  }
+]

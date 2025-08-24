@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
@@ -36,6 +37,29 @@ async def create_upload_file(file: UploadFile = File(...)):
         "message": "File uploaded successfully"
     }
 
+
+
+
 @app.post("/getAudioBooks/")
 async def get_audio_books():
-    return {"message": "This endpoint will return audio books."}
+    import json
+    # Get the directory of the current script
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(base_dir, "audiobooks.json")
+    with open(file_path, "r") as f:
+        audiobooks = json.load(f)
+    return {"audiobooks": audiobooks}
+
+@app.get("/audiobook/{filename}")
+async def get_audiobook_file(filename: str):
+    file_path = os.path.join("audiobooks", filename)
+    if not os.path.exists(file_path):
+        return {"error": "File not found"}
+    # Serve correct MIME type based on file extension
+    if filename.endswith(".mp3"):
+        media_type = "audio/mpeg"
+    elif filename.endswith(".m4a"):
+        media_type = "audio/mp4"
+    else:
+        media_type = "application/octet-stream"
+    return FileResponse(file_path, media_type=media_type)

@@ -15,11 +15,15 @@ import Animated, {
   FadeOut,
   SlideInDown,
 } from "react-native-reanimated";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 const GenerateAudioBook = () => {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Theme color for icons
+  const iconColor = useThemeColor({ light: "#222", dark: "#fff" }, "text");
 
   // Animated values
   const uploadScale = useSharedValue(1);
@@ -185,6 +189,55 @@ const GenerateAudioBook = () => {
       <ThemedText type="subtitle">Generate AudioBook</ThemedText>
 
       <ThemedView style={{ marginTop: 20 }}>
+        {!selectedFile && (
+          <ThemedView style={styles.bulletin}>
+            <View style={styles.bulletinHeader}>
+              <Ionicons
+                name="information-circle-outline"
+                size={22}
+                color={iconColor}
+                style={{ marginRight: 6 }}
+              />
+              <ThemedText type="defaultSemiBold">
+                Guidelines for Uploading Your Book
+              </ThemedText>
+            </View>
+            <View style={{ marginLeft: 8 }}>
+              <ThemedText type="default" style={styles.bulletItem}>
+                • Supported formats:{" "}
+                <ThemedText type="defaultSemiBold">PDF</ThemedText> and{" "}
+                <ThemedText type="defaultSemiBold">EPUB</ThemedText>
+              </ThemedText>
+              <ThemedText type="default" style={styles.bulletItem}>
+                • Maximum file size:{" "}
+                <ThemedText type="defaultSemiBold">50MB</ThemedText>
+              </ThemedText>
+              <ThemedText type="default" style={styles.bulletItem}>
+                • Make sure your file is{" "}
+                <ThemedText type="defaultSemiBold">
+                  not password protected
+                </ThemedText>
+              </ThemedText>
+              <ThemedText type="default" style={styles.bulletItem}>
+                • After uploading, click{" "}
+                <ThemedText type="defaultSemiBold">Generate</ThemedText> to
+                convert your book to audio
+              </ThemedText>
+            </View>
+            <ThemedText
+              type="default"
+              style={{
+                marginTop: 10,
+                fontStyle: "italic",
+                opacity: 0.7,
+                textAlign: "center",
+              }}
+            >
+              Your file will be processed securely and only used for audiobook
+              generation.
+            </ThemedText>
+          </ThemedView>
+        )}
         {!selectedFile ? (
           <Animated.View style={uploadAnimatedStyle}>
             <TouchableOpacity style={styles.upload} onPress={handleFileSelect}>
@@ -263,6 +316,27 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 80,
     paddingHorizontal: 20,
+  },
+  bulletin: {
+    borderWidth: 1,
+    borderColor: "#e0e4ea",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 18,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  bulletinHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  bulletItem: {
+    marginBottom: 4,
+    fontSize: 15,
   },
   upload: {
     marginVertical: 10,
