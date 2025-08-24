@@ -6,7 +6,7 @@
     "duration": "2h 15m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "A beginner's guide to the world of programming and software development.",
-    "audioUrl": "http://192.168.1.7:8000/audiobook/1.m4a",
+    "audioUrl": "http://192.168.1.11:8000/audiobook/1.m4a",
     "bookmarked": false
   },
   {
@@ -16,7 +16,7 @@
     "duration": "1h 45m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Explore the mysteries of the universe and the wonders of space travel.",
-    "audioUrl": "http://192.168.1.7:8000/audiobook/2.m4a",
+    "audioUrl": "http://192.168.1.11:8000/audiobook/2.m4a",
     "bookmarked": true
   },
   {
@@ -26,7 +26,8 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/a/olid/OL229501A-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+
+    "audioUrl": "http://192.168.1.11:8000/audiobook/3.m4a",
     "bookmarked": false
   },
   {
@@ -36,7 +37,7 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+    "audioUrl": "http://192.168.1.11:8000/audiobook/4.m4a",
     "bookmarked": true
   },
   {
@@ -46,7 +47,7 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.7:8000/audiobook/mindfulness_matters.mp3",
+    "audioUrl": "http://192.168.1.11:8000/audiobook/5.m4a",
     "bookmarked": false
   }
 ]

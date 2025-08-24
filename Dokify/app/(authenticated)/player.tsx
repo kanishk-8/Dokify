@@ -5,11 +5,11 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { useSharedAudioPlayer } from "@/context/audioprovider";
 
 export default function Player() {
-  const { player, status } = useSharedAudioPlayer();
+  const { player, status, audiotitle } = useSharedAudioPlayer();
 
   return (
     <ThemedView style={styles.full}>
-      <ThemedText type="title">Full Player</ThemedText>
+      <ThemedText type="title">{audiotitle || "No Audio Playing"}</ThemedText>
       <ThemedText type="subtitle">
         {status.currentTime.toFixed(0)}s / {status.duration.toFixed(0)}s
       </ThemedText>

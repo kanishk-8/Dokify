@@ -6,9 +6,11 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import Player from "@/components/miniplayer";
+import { useSharedAudioPlayer } from "@/context/audioprovider";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { audiourl } = useSharedAudioPlayer();
 
   return (
     <>
@@ -57,7 +59,7 @@ export default function TabLayout() {
         />
       </Tabs>
 
-      <Player />
+      {audiourl && <Player />}
     </>
   );
 }

@@ -37,7 +37,8 @@ const Index = () => {
     "background",
   );
   const iconColor = useThemeColor({ light: "#fff", dark: "#000" }, "text");
-  const { setAudiourl, player, status } = useSharedAudioPlayer();
+  const { setAudiourl, audiourl, player, status, setAudiotitle } =
+    useSharedAudioPlayer();
   const [requestedUrl, setRequestedUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -134,92 +135,114 @@ const Index = () => {
             ? { flex: 1, justifyContent: "center", alignItems: "center" }
             : { paddingBottom: 70 }
         }
-        renderItem={({ item: book }) => (
-          <ThemedView
-            style={[styles.bookcontainer, { backgroundColor: bookBgColor }]}
-          >
-            <MaterialIcons
-              style={styles.bookmarkicon}
-              name={book.bookmarked ? "bookmark-add" : "bookmark-added"}
-              size={24}
-              color={iconColor}
-            />
-            <TouchableOpacity
-              style={styles.playIcon}
-              onPress={() => {
-                setAudiourl(book.audioUrl);
-                setRequestedUrl(book.audioUrl);
-              }}
+        renderItem={({ item: book }) => {
+          const isCurrentBook = audiourl === book.audioUrl;
+          const isPlaying = isCurrentBook && status?.playing;
+
+          return (
+            <ThemedView
+              style={[styles.bookcontainer, { backgroundColor: bookBgColor }]}
             >
-              <Ionicons name="play-circle" size={40} color={iconColor} />
-            </TouchableOpacity>
-            <View style={styles.bookRow}>
-              <View style={{ alignItems: "center" }}>
-                <Image
-                  style={styles.coverImage}
-                  source={{
-                    uri: book.coverImage,
-                  }}
+              <MaterialIcons
+                style={styles.bookmarkicon}
+                name={book.bookmarked ? "bookmark" : "bookmark-border"}
+                size={24}
+                color={iconColor}
+              />
+              <TouchableOpacity
+                style={styles.playIcon}
+                onPress={() => {
+                  if (!isCurrentBook) {
+                    setAudiourl(book.audioUrl);
+                    setAudiotitle(book.title);
+                    setRequestedUrl(book.audioUrl);
+                  } else {
+                    if (isPlaying) {
+                      player.pause();
+                    } else {
+                      player.play();
+                    }
+                  }
+                }}
+              >
+                <Ionicons
+                  name={isPlaying ? "pause-circle" : "play-circle"}
+                  size={40}
+                  color={iconColor}
                 />
-                <ThemedText
-                  type="buttonText"
-                  style={{
-                    fontSize: 12,
-                    marginTop: 6,
-                    textAlign: "center",
-                  }}
-                >
-                  {book.duration}
-                </ThemedText>
-              </View>
-              <View style={styles.infoContainer}>
-                <ThemedText
-                  type="buttonText"
-                  numberOfLines={1}
-                  style={{ fontSize: 18, fontWeight: "bold", marginBottom: 4 }}
-                >
-                  {book.title}
-                </ThemedText>
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#eee",
-                    marginVertical: 6,
-                  }}
-                />
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                  }}
-                >
+              </TouchableOpacity>
+              <View style={styles.bookRow}>
+                <View style={{ alignItems: "center" }}>
+                  <Image
+                    style={styles.coverImage}
+                    source={{
+                      uri: book.coverImage,
+                    }}
+                  />
+                  <ThemedText
+                    type="buttonText"
+                    style={{
+                      fontSize: 12,
+                      marginTop: 6,
+                      textAlign: "center",
+                    }}
+                  >
+                    {book.duration}
+                  </ThemedText>
+                </View>
+                <View style={styles.infoContainer}>
+                  <ThemedText
+                    type="buttonText"
+                    numberOfLines={1}
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {book.title}
+                  </ThemedText>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#eee",
+                      marginVertical: 6,
+                    }}
+                  />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <ThemedText
+                      type="buttonText"
+                      style={{
+                        fontSize: 14,
+                        marginBottom: 6,
+                        flex: 1,
+                      }}
+                      numberOfLines={2}
+                    >
+                      {book.description}
+                    </ThemedText>
+                  </View>
                   <ThemedText
                     type="buttonText"
                     style={{
                       fontSize: 14,
-                      marginBottom: 6,
-                      flex: 1,
+                      marginTop: 6,
+                      fontStyle: "italic",
                     }}
-                    numberOfLines={2}
                   >
-                    {book.description}
+                    ~ {book.author}
                   </ThemedText>
                 </View>
-                <ThemedText
-                  type="buttonText"
-                  style={{
-                    fontSize: 14,
-                    marginTop: 6,
-                    fontStyle: "italic",
-                  }}
-                >
-                  ~ {book.author}
-                </ThemedText>
               </View>
-            </View>
-          </ThemedView>
-        )}
+            </ThemedView>
+          );
+        }}
         refreshing={loading}
         onRefresh={fetchAudioBooks}
       />

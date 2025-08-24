@@ -6,9 +6,13 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 
+// Removed getAudioTitle helper, will use audiotitle from context
+
 export default function Player() {
   const router = useRouter();
-  const { player, status } = useSharedAudioPlayer();
+  const { player, status, audiotitle } = useSharedAudioPlayer();
+
+  // Hide miniplayer if no audio is loaded
 
   // Theme colors
   const backgroundColor = useThemeColor(
@@ -24,6 +28,9 @@ export default function Player() {
     "tint",
   );
 
+  // Use audiotitle from context
+  const audioTitle = audiotitle || "No Audio Playing";
+
   return (
     <View style={[styles.mini, { backgroundColor }]}>
       <TouchableOpacity
@@ -37,7 +44,7 @@ export default function Player() {
         activeOpacity={0.8}
       >
         <ThemedText type="defaultSemiBold" style={{ color: textColor }}>
-          Sample Audio Book
+          {audioTitle}
         </ThemedText>
         <TouchableOpacity
           onPress={() => {

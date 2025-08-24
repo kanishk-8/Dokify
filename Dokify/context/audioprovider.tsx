@@ -11,6 +11,8 @@ const AudioPlayerContext = createContext<{
   status: ReturnType<typeof useAudioPlayerStatus>;
   audiourl: string | null;
   setAudiourl: React.Dispatch<React.SetStateAction<string | null>>;
+  audiotitle: string | null;
+  setAudiotitle: React.Dispatch<React.SetStateAction<string | null>>;
 } | null>(null);
 
 export function AudioPlayerProvider({
@@ -19,6 +21,7 @@ export function AudioPlayerProvider({
   children: React.ReactNode;
 }) {
   const [audiourl, setAudiourl] = useState<string | null>(null);
+  const [audiotitle, setAudiotitle] = useState<string | null>(null);
   const player = useAudioPlayer({
     uri: audiourl ?? undefined,
   });
@@ -32,7 +35,14 @@ export function AudioPlayerProvider({
 
   return (
     <AudioPlayerContext.Provider
-      value={{ player, status, audiourl, setAudiourl }}
+      value={{
+        player,
+        status,
+        audiourl,
+        setAudiourl,
+        audiotitle,
+        setAudiotitle,
+      }}
     >
       {children}
     </AudioPlayerContext.Provider>
