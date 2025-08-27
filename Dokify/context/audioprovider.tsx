@@ -6,6 +6,17 @@ import {
 } from "expo-audio";
 
 // Define the context shape
+type Audiobook = {
+  id: string;
+  title: string;
+  author: string;
+  duration: string;
+  coverImage: string;
+  description: string;
+  audioUrl: string;
+  bookmarked: boolean;
+};
+
 const AudioPlayerContext = createContext<{
   player: ReturnType<typeof useAudioPlayer>;
   status: ReturnType<typeof useAudioPlayerStatus>;
@@ -13,6 +24,8 @@ const AudioPlayerContext = createContext<{
   setAudiourl: React.Dispatch<React.SetStateAction<string | null>>;
   audiotitle: string | null;
   setAudiotitle: React.Dispatch<React.SetStateAction<string | null>>;
+  currentBook: Audiobook | null;
+  setCurrentBook: React.Dispatch<React.SetStateAction<Audiobook | null>>;
 } | null>(null);
 
 export function AudioPlayerProvider({
@@ -22,6 +35,7 @@ export function AudioPlayerProvider({
 }) {
   const [audiourl, setAudiourl] = useState<string | null>(null);
   const [audiotitle, setAudiotitle] = useState<string | null>(null);
+  const [currentBook, setCurrentBook] = useState<Audiobook | null>(null);
   const player = useAudioPlayer({
     uri: audiourl ?? undefined,
   });
@@ -42,6 +56,8 @@ export function AudioPlayerProvider({
         setAudiourl,
         audiotitle,
         setAudiotitle,
+        currentBook,
+        setCurrentBook,
       }}
     >
       {children}

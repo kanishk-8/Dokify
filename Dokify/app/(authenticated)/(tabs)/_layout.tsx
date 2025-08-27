@@ -4,7 +4,11 @@ import React from "react";
 import { HapticTab } from "@/components/HapticTab";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome6,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import Player from "@/components/miniplayer";
 import { useSharedAudioPlayer } from "@/context/audioprovider";
 
@@ -29,9 +33,13 @@ export default function TabLayout() {
         <Tabs.Screen
           name="home"
           options={{
-            title: "Home",
+            title: "Library",
             tabBarIcon: ({ color, focused }) => (
-              <Feather name="home" size={focused ? 28 : 26} color={color} />
+              <MaterialCommunityIcons
+                name="book-music"
+                size={focused ? 28 : 26}
+                color={color}
+              />
             ),
           }}
         />
@@ -40,8 +48,8 @@ export default function TabLayout() {
           options={{
             title: "Generate",
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons
-                name="book-music-outline"
+              <FontAwesome6
+                name="wand-magic-sparkles"
                 size={focused ? 28 : 26}
                 color={color}
               />

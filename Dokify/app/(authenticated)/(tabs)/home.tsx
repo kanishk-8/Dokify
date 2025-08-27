@@ -37,8 +37,14 @@ const Index = () => {
     "background",
   );
   const iconColor = useThemeColor({ light: "#fff", dark: "#000" }, "text");
-  const { setAudiourl, audiourl, player, status, setAudiotitle } =
-    useSharedAudioPlayer();
+  const {
+    setAudiourl,
+    audiourl,
+    player,
+    status,
+    setAudiotitle,
+    setCurrentBook,
+  } = useSharedAudioPlayer();
   const [requestedUrl, setRequestedUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -53,12 +59,12 @@ const Index = () => {
     }
   }, [requestedUrl, status, player]);
 
-  // Fetch audiobooks from backend API
+  // Fetch audiobooks from backend API (updated to use correct endpoint and data structure)
   const fetchAudioBooks = () => {
     setLoading(true);
     setError(null);
-    fetch("http://192.168.1.11:8000/getAudioBooks/", {
-      method: "POST",
+    fetch("http://192.168.1.11:8000/audiobooks/", {
+      method: "GET",
     })
       .then((res) => {
         if (!res.ok) {
@@ -67,7 +73,9 @@ const Index = () => {
         return res.json();
       })
       .then((data) => {
-        setAudioBooks(data.audiobooks || []);
+        // Use the 'books' array from the backend response
+        const books = (data.books || []) as Audiobook[];
+        setAudioBooks(books);
         setError(null);
       })
       .catch((err) => {
@@ -156,6 +164,8 @@ const Index = () => {
                     setAudiourl(book.audioUrl);
                     setAudiotitle(book.title);
                     setRequestedUrl(book.audioUrl);
+                    if (typeof setCurrentBook === "function")
+                      setCurrentBook(book);
                   } else {
                     if (isPlaying) {
                       player.pause();

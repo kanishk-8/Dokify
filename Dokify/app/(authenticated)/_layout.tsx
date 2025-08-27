@@ -1,7 +1,9 @@
 import { AudioPlayerProvider } from "@/context/audioprovider";
-import { Slot, Stack } from "expo-router";
+import { Stack } from "expo-router";
 
+import { useThemeColor } from "@/hooks/useThemeColor";
 export default function HomeLayout() {
+  const backgroundColor = useThemeColor({}, "background");
   return (
     <AudioPlayerProvider>
       <Stack screenOptions={{ headerShown: false }}>
@@ -11,6 +13,7 @@ export default function HomeLayout() {
             presentation: "modal",
             animation: "slide_from_bottom",
             statusBarAnimation: "slide",
+            contentStyle: { backgroundColor },
           }}
         />
       </Stack>

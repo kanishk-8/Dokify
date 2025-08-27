@@ -94,13 +94,14 @@ const GenerateAudioBook = () => {
     try {
       const formData = new FormData();
 
-      const fileToUpload = {
+      formData.append("file", {
         uri: selectedFile.uri,
         type: selectedFile.mimeType || "application/octet-stream",
         name: selectedFile.name,
-      } as any;
-
-      formData.append("file", fileToUpload);
+      });
+      formData.append("protagonist", "John Doe"); // You can make this dynamic
+      formData.append("single_voice", "true"); // Or "false" for multi-voice
+      formData.append("output_format", "m4a"); // Or "mp3", "m4b"
 
       // Simulate progress animation
       const progressInterval = setInterval(() => {
@@ -122,12 +123,9 @@ const GenerateAudioBook = () => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Upload successful:", result);
-
-        // Complete progress
         setUploadProgress(100);
-
-        // Success animation: gentle bounce
+        // Optionally show result.message or result.audio_path
+        // alert(result.message);
         buttonScale.value = withSpring(1.05, {
           damping: 15,
           stiffness: 300,

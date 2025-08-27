@@ -12,7 +12,8 @@ export type ThemedTextProps = TextProps & {
     | "subtitle"
     | "link"
     | "animeFont"
-    | "buttonText";
+    | "buttonText"
+    | "small";
 };
 
 export function ThemedText({
@@ -35,10 +36,11 @@ export function ThemedText({
         type === "default" ? styles.default : undefined,
         type === "title" ? styles.title : undefined,
         type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
+        type === "animeFont" ? styles.animeFont : undefined,
         type === "subtitle" ? styles.subtitle : undefined,
         type === "link" ? styles.link : undefined,
-        type === "animeFont" ? styles.animeFont : undefined,
         type === "buttonText" ? styles.buttonText : undefined,
+        type === "small" ? styles.small : undefined,
         style,
       ]}
       {...rest}
@@ -83,5 +85,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
+  },
+  small: {
+    fontSize: 13,
+    lineHeight: 18,
   },
 });
