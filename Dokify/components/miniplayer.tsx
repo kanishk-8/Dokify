@@ -1,6 +1,5 @@
 import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import { useSharedAudioPlayer } from "../context/audioprovider";
-import { ThemedText } from "./ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";

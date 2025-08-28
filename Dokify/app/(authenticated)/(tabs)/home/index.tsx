@@ -23,6 +23,11 @@ type Audiobook = {
   description: string;
   audioUrl: string;
   bookmarked: boolean;
+  chapters?: {
+    title: string;
+    audioUrl: string;
+    duration: string;
+  }[];
 };
 
 // const audiobooksData: Audiobook[] = audiodata as Audiobook[];
@@ -63,7 +68,7 @@ const Index = () => {
   const fetchAudioBooks = () => {
     setLoading(true);
     setError(null);
-    fetch("http://192.168.1.11:8000/audiobooks/", {
+    fetch(`${process.env.EXPO_PUBLIC_BACKENDURL}/audiobooks/`, {
       method: "GET",
     })
       .then((res) => {
@@ -74,7 +79,11 @@ const Index = () => {
       })
       .then((data) => {
         // Use the 'books' array from the backend response
-        const books = (data.books || []) as Audiobook[];
+        // Construct the correct audioUrl for each book
+        const books = (data.books || []).map((book: Audiobook) => ({
+          ...book,
+          audioUrl: `${process.env.EXPO_PUBLIC_BACKENDURL}/audiobook/${book.audioUrl}`,
+        })) as Audiobook[];
         setAudioBooks(books);
         setError(null);
       })
@@ -148,8 +157,12 @@ const Index = () => {
           const isPlaying = isCurrentBook && status?.playing;
 
           return (
-            <ThemedView
+            <TouchableOpacity
               style={[styles.bookcontainer, { backgroundColor: bookBgColor }]}
+              activeOpacity={0.8}
+              onPress={() => {
+                router.push("/(authenticated)/(tabs)/home/bookdetails");
+              }}
             >
               <MaterialIcons
                 style={styles.bookmarkicon}
@@ -157,30 +170,31 @@ const Index = () => {
                 size={24}
                 color={iconColor}
               />
-              <TouchableOpacity
-                style={styles.playIcon}
-                onPress={() => {
-                  if (!isCurrentBook) {
-                    setAudiourl(book.audioUrl);
-                    setAudiotitle(book.title);
-                    setRequestedUrl(book.audioUrl);
-                    if (typeof setCurrentBook === "function")
-                      setCurrentBook(book);
-                  } else {
-                    if (isPlaying) {
-                      player.pause();
+              <View style={styles.playIcon}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!isCurrentBook) {
+                      setAudiourl(book.audioUrl);
+                      setAudiotitle(book.title);
+                      setRequestedUrl(book.audioUrl);
+                      if (typeof setCurrentBook === "function")
+                        setCurrentBook(book);
                     } else {
-                      player.play();
+                      if (isPlaying) {
+                        player.pause();
+                      } else {
+                        player.play();
+                      }
                     }
-                  }
-                }}
-              >
-                <Ionicons
-                  name={isPlaying ? "pause-circle" : "play-circle"}
-                  size={40}
-                  color={iconColor}
-                />
-              </TouchableOpacity>
+                  }}
+                >
+                  <Ionicons
+                    name={isPlaying ? "pause-circle" : "play-circle"}
+                    size={40}
+                    color={iconColor}
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={styles.bookRow}>
                 <View style={{ alignItems: "center" }}>
                   <Image
@@ -250,7 +264,7 @@ const Index = () => {
                   </ThemedText>
                 </View>
               </View>
-            </ThemedView>
+            </TouchableOpacity>
           );
         }}
         refreshing={loading}

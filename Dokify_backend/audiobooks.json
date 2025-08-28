@@ -6,17 +6,17 @@
     "duration": "2h 15m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "A beginner's guide to the world of programming and software development.",
-    "audioUrl": "http://192.168.1.11:8000/audiobook/1.m4a",
+    "audioUrl": "1.m4a",
     "bookmarked": false,
     "chapters": [
       {
         "title": "The Art of Coding",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/1_chapter1.m4a",
+        "audioUrl": "1_chapter1.m4a",
         "duration": "45m"
       },
       {
         "title": "The Art of Coding",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/1_chapter2.m4a",
+        "audioUrl": "1_chapter2.m4a",
         "duration": "50m"
       }
     ]
@@ -28,12 +28,12 @@
     "duration": "1h 45m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Explore the mysteries of the universe and the wonders of space travel.",
-    "audioUrl": "http://192.168.1.11:8000/audiobook/2.m4a",
+    "audioUrl": "2.m4a",
     "bookmarked": true,
     "chapters": [
       {
         "title": "Journey Through Space",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/2_chapter1.m4a",
+        "audioUrl": "2_chapter1.m4a",
         "duration": "1h 45m"
       }
     ]
@@ -45,17 +45,17 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/a/olid/OL229501A-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.11:8000/audiobook/3.m4a",
+    "audioUrl": "3.m4a",
     "bookmarked": false,
     "chapters": [
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/3_chapter1.m4a",
+        "audioUrl": "3_chapter1.m4a",
         "duration": "1h 35m"
       },
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/3_chapter2.m4a",
+        "audioUrl": "3_chapter2.m4a",
         "duration": "1h 35m"
       }
     ]
@@ -67,17 +67,17 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.11:8000/audiobook/4.m4a",
+    "audioUrl": "4.m4a",
     "bookmarked": true,
     "chapters": [
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/4_chapter1.m4a",
+        "audioUrl": "4_chapter1.m4a",
         "duration": "1h 35m"
       },
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/4_chapter2.m4a",
+        "audioUrl": "4_chapter2.m4a",
         "duration": "1h 35m"
       }
     ]
@@ -89,17 +89,17 @@
     "duration": "3h 10m",
     "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "http://192.168.1.11:8000/audiobook/5.m4a",
+    "audioUrl": "5.m4a",
     "bookmarked": false,
     "chapters": [
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/5_chapter1.m4a",
+        "audioUrl": "5_chapter1.m4a",
         "duration": "1h 35m"
       },
       {
         "title": "Mindfulness Matters",
-        "audioUrl": "http://192.168.1.11:8000/audiobook/5_chapter2.m4a",
+        "audioUrl": "5_chapter2.m4a",
         "duration": "1h 35m"
       }
     ]

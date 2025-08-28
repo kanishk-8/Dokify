@@ -15,6 +15,7 @@ import { useSharedAudioPlayer } from "@/context/audioprovider";
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { audiourl } = useSharedAudioPlayer();
+  console.log("audiourl now", audiourl);
 
   return (
     <>

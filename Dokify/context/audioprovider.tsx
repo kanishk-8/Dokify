@@ -15,6 +15,11 @@ type Audiobook = {
   description: string;
   audioUrl: string;
   bookmarked: boolean;
+  chapters?: {
+    title: string;
+    audioUrl: string;
+    duration: string;
+  }[];
 };
 
 const AudioPlayerContext = createContext<{
