@@ -1,23 +1,71 @@
+import React, { useEffect, useState } from "react";
+import { StyleSheet, ActivityIndicator } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedButton } from "@/components/ThemedButton";
-import { useRouter } from "expo-router";
-import { StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
+import { useRouter } from "expo-router";
+
+export const useWarmUpBrowser = () => {
+  React.useEffect(() => {
+    void WebBrowser.warmUpAsync();
+    return () => {
+      void WebBrowser.coolDownAsync();
+    };
+  }, []);
+};
+
+WebBrowser.maybeCompleteAuthSession();
 
 const LandinPage = () => {
-  const router = useRouter();
+  useWarmUpBrowser();
   const colorScheme = useColorScheme();
-  const signin = () => {
-    router.push("/(authenticated)/(tabs)/home");
+  const { startSSOFlow } = useSSO();
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+  const [redirecting, setRedirecting] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      setRedirecting(true);
+      setTimeout(() => {
+        router.replace("/(authenticated)/(tabs)/home");
+      }, 100);
+    }
+  }, [isSignedIn, router]);
+
+  // Handle Google OAuth
+  const handleGoogleLogin = async () => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy: "oauth_google",
+        redirectUrl: Linking.createURL("/"),
+      });
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+        router.replace("/(authenticated)/(tabs)/home");
+      }
+    } catch {
+      // Optionally handle error
+    }
   };
-  const signup = () => {
-    router.push("/onboarding");
-  };
+
+  if (redirecting) {
+    return (
+      <ThemedView style={style.container}>
+        <ActivityIndicator size="large" color="#888" />
+      </ThemedView>
+    );
+  }
+
   return (
     <ThemedView style={style.container}>
-      <ThemedText type="animeFont">Wellcome to Dokify </ThemedText>
+      <ThemedText type="animeFont">Welcome to Dokify</ThemedText>
       <LottieView
         source={
           colorScheme === "dark"
@@ -29,16 +77,16 @@ const LandinPage = () => {
         style={style.lottie}
       />
       <ThemedButton
-        title="Sign In"
-        onPress={signin}
-        variant="primary"
-        size="medium"
-        fullWidth
-        style={style.buttoncontainer}
-      />
-      <ThemedButton
-        title="Sign Up"
-        onPress={signup}
+        title="Continue with Google"
+        icon={
+          <AntDesign
+            name="google"
+            size={24}
+            color={colorScheme === "dark" ? "#000" : "#fff"}
+            style={{ marginRight: 8 }}
+          />
+        }
+        onPress={handleGoogleLogin}
         variant="primary"
         size="medium"
         fullWidth
@@ -54,9 +102,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 50,
   },
   lottie: { width: 450, height: 450 },
   buttoncontainer: {
