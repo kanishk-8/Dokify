@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { useSharedAudioPlayer } from "@/context/audioprovider";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useLocalSearchParams } from "expo-router";
-import { ActivityIndicator } from "react-native";
 
 const BookDetails = () => {
   const {
