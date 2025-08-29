@@ -1,11 +1,17 @@
-import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { useSharedAudioPlayer } from "../context/audioprovider";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import TextTicker from "react-native-text-ticker";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { ThemedText } from "@/components/ThemedText";
 
 // Removed getAudioTitle helper, will use audiotitle from context
 
@@ -24,21 +30,44 @@ export default function Player() {
     }
   };
 
-  // Hide miniplayer if no audio is loaded
+  // Helper to format seconds as mm:ss
+  function formatTime(seconds: number) {
+    if (!seconds) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  }
 
-  // Theme colors
+  // State for progress bar width
+  const [barWidth, setBarWidth] = useState(0);
+
+  // Calculate progress and head position
+  const progress =
+    status &&
+    typeof status.currentTime === "number" &&
+    typeof status.duration === "number" &&
+    status.duration > 0
+      ? Math.min(Math.max(status.currentTime / status.duration, 0), 1)
+      : 0;
+  const headPosition = barWidth * progress;
+
+  // Match ThemedView background color for both modes
+  // Contrasting miniplayer: black in light mode, white in dark mode
   const backgroundColor = useThemeColor(
-    { light: Colors.light.card, dark: Colors.dark.card },
+    { light: "#000", dark: "#fff" },
     "background",
   );
+  // Use a soft but visible border color in both modes
+  const borderColor = useThemeColor(
+    { light: "#e0e4ea", dark: "#3a3d42" },
+    "background",
+  );
+  // Contrasting text and icon color: white on black, black on white
   const textColor = useThemeColor(
-    { light: Colors.dark.text, dark: Colors.light.text },
-    "text",
+    { light: "#fff", dark: "#000" },
+    "background",
   );
-  const iconColor = useThemeColor(
-    { light: Colors.dark.tint, dark: Colors.light.tint },
-    "tint",
-  );
+  const iconColor = textColor;
 
   // Use currentBook from context if available
   const audioTitle = currentBook?.title || audiotitle || "No Audio Playing";
@@ -47,7 +76,7 @@ export default function Player() {
   };
 
   return (
-    <View style={[styles.mini, { backgroundColor }]}>
+    <View style={[styles.mini, { backgroundColor, borderColor }]}>
       <TouchableOpacity
         style={{
           flexDirection: "row",
@@ -58,35 +87,103 @@ export default function Player() {
         onPress={handleOpenPlayer}
         activeOpacity={0.8}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-            minWidth: 0,
-          }}
-        >
-          <Image
-            source={coverImageSource}
-            style={styles.miniCoverImage}
-            resizeMode="cover"
-          />
-          <View style={{ flex: 1, marginLeft: 10, minWidth: 0 }}>
-            <TextTicker
+        <Image
+          source={coverImageSource}
+          style={styles.miniCoverImage}
+          resizeMode="cover"
+        />
+        <View style={{ flex: 1, marginLeft: 10, minWidth: 0 }}>
+          <TextTicker
+            style={{
+              color: textColor,
+              fontWeight: "black",
+              width: "100%",
+            }}
+            duration={12000}
+            loop
+            bounce={false}
+            repeatSpacer={50}
+            marqueeDelay={1000}
+            numberOfLines={1}
+          >
+            {audioTitle}
+          </TextTicker>
+          <View style={{ height: 4 }} />
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 2,
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <ThemedText
+              type="small"
               style={{
                 color: textColor,
-                fontWeight: "bold",
-                width: "100%",
+                opacity: 0.7,
+                minWidth: 40,
+                textAlign: "right",
+                paddingRight: 8,
               }}
-              duration={12000}
-              loop
-              bounce={false}
-              repeatSpacer={50}
-              marqueeDelay={1000}
-              numberOfLines={1}
             >
-              {audioTitle}
-            </TextTicker>
+              {status && status.currentTime
+                ? formatTime(status.currentTime)
+                : "0:00"}
+            </ThemedText>
+            <View
+              style={{
+                flex: 1,
+                height: 3,
+                backgroundColor: textColor,
+                borderRadius: 2,
+                overflow: "visible",
+                position: "relative",
+                marginLeft: 8,
+                marginRight: 8,
+              }}
+              onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
+            >
+              {/* Progress bar fill and head as before */}
+              <View
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: barWidth * progress,
+                  height: 3,
+                  backgroundColor: iconColor,
+                  borderRadius: 2,
+                }}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  left: Math.max(Math.min(headPosition - 5, barWidth - 6), 0),
+                  top: -4,
+                  width: 11,
+                  height: 11,
+                  borderRadius: 6,
+                  backgroundColor: iconColor,
+                  borderWidth: 1,
+                  borderColor: textColor,
+                }}
+              />
+            </View>
+            <ThemedText
+              type="small"
+              style={{
+                color: textColor,
+                opacity: 0.7,
+                minWidth: 40,
+                textAlign: "left",
+                paddingLeft: 8,
+              }}
+            >
+              {status && status.duration ? formatTime(status.duration) : "0:00"}
+            </ThemedText>
           </View>
         </View>
         <TouchableOpacity
@@ -99,11 +196,15 @@ export default function Player() {
           }}
           activeOpacity={0.7}
         >
-          <Ionicons
-            name={status.playing ? "pause-circle" : "play-circle"}
-            size={50}
-            color={iconColor}
-          />
+          {status.isBuffering ? (
+            <ActivityIndicator size={36} color={iconColor} />
+          ) : (
+            <Ionicons
+              name={status.playing ? "pause-circle" : "play-circle"}
+              size={50}
+              color={iconColor}
+            />
+          )}
         </TouchableOpacity>
       </TouchableOpacity>
     </View>
@@ -113,19 +214,16 @@ export default function Player() {
 const styles = StyleSheet.create({
   mini: {
     position: "absolute",
-    bottom: 75,
+    bottom: 72,
     left: 10,
     right: 10,
-    borderRadius: 12,
-    padding: 10,
+    borderRadius: 12, // softer corners
+    padding: 12,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1.5,
+    // borderColor set inline in component
   },
   fullplayer: {
     flex: 1,
@@ -135,6 +233,6 @@ const styles = StyleSheet.create({
     aspectRatio: 0.8,
     height: 50,
     borderRadius: 8,
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
   },
 });

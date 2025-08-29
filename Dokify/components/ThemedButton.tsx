@@ -10,6 +10,7 @@ import { Colors } from "@/constants/Colors";
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   title: string;
+  icon?: React.ReactNode;
   lightColor?: string;
   darkColor?: string;
   textLightColor?: string;
@@ -21,6 +22,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
 
 export function ThemedButton({
   title,
+  icon,
   style,
   lightColor,
   darkColor,
@@ -124,6 +126,7 @@ export function ThemedButton({
       activeOpacity={0.8}
       {...rest}
     >
+      {icon && <>{icon}</>}
       <ThemedText
         style={[
           styles.text,

@@ -3,105 +3,149 @@
     "id": "1",
     "title": "The Art of Coding",
     "author": "Jane Doe",
-    "duration": "2h 15m",
-    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "coverImage": "https://covers.openlibrary.org/b/id/8231856-L.jpg",
     "description": "A beginner's guide to the world of programming and software development.",
-    "audioUrl": "1.m4a",
     "bookmarked": false,
     "chapters": [
-      {
-        "title": "The Art of Coding",
-        "audioUrl": "1_chapter1.m4a",
-        "duration": "45m"
-      },
-      {
-        "title": "The Art of Coding",
-        "audioUrl": "1_chapter2.m4a",
-        "duration": "50m"
-      }
+      { "title": "Introduction to Programming", "audioUrl": "1c1.m4a" },
+      { "title": "Variables and Data Types", "audioUrl": "1c2.m4a" },
+      { "title": "Control Structures", "audioUrl": "1c3.m4a" },
+      { "title": "Functions and Modules", "audioUrl": "1c4.m4a" },
+      { "title": "Debugging Techniques", "audioUrl": "1c5.m4a" }
     ]
   },
   {
     "id": "2",
     "title": "Journey Through Space",
     "author": "John Smith",
-    "duration": "1h 45m",
-    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
+    "coverImage": "https://covers.openlibrary.org/b/id/10523358-L.jpg",
     "description": "Explore the mysteries of the universe and the wonders of space travel.",
-    "audioUrl": "2.m4a",
     "bookmarked": true,
     "chapters": [
-      {
-        "title": "Journey Through Space",
-        "audioUrl": "2_chapter1.m4a",
-        "duration": "1h 45m"
-      }
+      { "title": "The Solar System", "audioUrl": "2c1.m4a" },
+      { "title": "Beyond the Milky Way", "audioUrl": "2c2.m4a" },
+      { "title": "Black Holes", "audioUrl": "2c3.m4a" },
+      { "title": "Space Exploration", "audioUrl": "2c4.m4a" }
     ]
   },
   {
     "id": "3",
     "title": "Mindfulness Matters",
     "author": "Emily Clark",
-    "duration": "3h 10m",
-    "coverImage": "https://covers.openlibrary.org/a/olid/OL229501A-S.jpg",
+    "coverImage": "https://covers.openlibrary.org/b/id/11153223-L.jpg",
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "3.m4a",
     "bookmarked": false,
     "chapters": [
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "3_chapter1.m4a",
-        "duration": "1h 35m"
-      },
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "3_chapter2.m4a",
-        "duration": "1h 35m"
-      }
+      { "title": "What is Mindfulness?", "audioUrl": "3c1.m4a" },
+      { "title": "Breathing Exercises", "audioUrl": "3c2.m4a" },
+      { "title": "Daily Practices", "audioUrl": "3c3.m4a" },
+      { "title": "Mindful Eating", "audioUrl": "3c4.m4a" },
+      { "title": "Overcoming Stress", "audioUrl": "3c5.m4a" }
     ]
   },
   {
     "id": "4",
-    "title": "Mindfulness Matters",
-    "author": "Emily Clark",
-    "duration": "3h 10m",
-    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
-    "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "4.m4a",
+    "title": "The Science of Sleep",
+    "author": "Dr. Alan Grant",
+    "coverImage": "https://covers.openlibrary.org/b/id/10523360-L.jpg",
+    "description": "Unlock the secrets to better sleep and improved health.",
     "bookmarked": true,
     "chapters": [
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "4_chapter1.m4a",
-        "duration": "1h 35m"
-      },
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "4_chapter2.m4a",
-        "duration": "1h 35m"
-      }
+      { "title": "Understanding Sleep Cycles", "audioUrl": "4c1.m4a" },
+      { "title": "Common Sleep Disorders", "audioUrl": "4c2.m4a" },
+      { "title": "Tips for Better Sleep", "audioUrl": "4c3.m4a" },
+      { "title": "Sleep and Mental Health", "audioUrl": "4c4.m4a" },
+      { "title": "Sleep Technology", "audioUrl": "4c5.m4a" },
+      { "title": "Q&A and Myths", "audioUrl": "4c6.m4a" }
     ]
   },
   {
     "id": "5",
-    "title": "Mindfulness Matters",
-    "author": "Emily Clark",
-    "duration": "3h 10m",
-    "coverImage": "https://covers.openlibrary.org/b/id/240727-S.jpg",
-    "description": "Techniques and stories to help you live a more mindful and peaceful life.",
-    "audioUrl": "5.m4a",
+    "title": "History's Greatest Inventions",
+    "author": "Sarah Lee",
+    "coverImage": "https://covers.openlibrary.org/b/id/10909258-L.jpg",
+    "description": "Discover the inventions that changed the world.",
     "bookmarked": false,
     "chapters": [
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "5_chapter1.m4a",
-        "duration": "1h 35m"
-      },
-      {
-        "title": "Mindfulness Matters",
-        "audioUrl": "5_chapter2.m4a",
-        "duration": "1h 35m"
-      }
+      { "title": "The Wheel", "audioUrl": "5c1.m4a" },
+      { "title": "Printing Press", "audioUrl": "5c2.m4a" },
+      { "title": "Electricity", "audioUrl": "5c3.m4a" },
+      { "title": "Telephone", "audioUrl": "5c4.m4a" },
+      { "title": "Internet", "audioUrl": "5c5.m4a" },
+      { "title": "Modern Medicine", "audioUrl": "5c6.m4a" }
+    ]
+  },
+  {
+    "id": "6",
+    "title": "Adventures in Nature",
+    "author": "Tom Rivers",
+    "coverImage": "https://covers.openlibrary.org/b/id/10594766-L.jpg",
+    "description": "Stories and tips for exploring the great outdoors.",
+    "bookmarked": true,
+    "chapters": [
+      { "title": "Mountain Hiking", "audioUrl": "6c1.m4a" },
+      { "title": "Camping Essentials", "audioUrl": "6c2.m4a" },
+      { "title": "Wildlife Encounters", "audioUrl": "6c3.m4a" },
+      { "title": "Survival Skills", "audioUrl": "6c4.m4a" },
+      { "title": "Nature Photography", "audioUrl": "6c5.m4a" }
+    ]
+  },
+  {
+    "id": "7",
+    "title": "The Power of Habit",
+    "author": "Charles Duhigg",
+    "coverImage": "https://covers.openlibrary.org/b/id/10521258-L.jpg",
+    "description": "Learn how habits are formed and how to change them for a better life.",
+    "bookmarked": false,
+    "chapters": [
+      { "title": "The Habit Loop", "audioUrl": "7c1.m4a" },
+      { "title": "Craving and Reward", "audioUrl": "7c2.m4a" },
+      { "title": "Changing Habits", "audioUrl": "7c3.m4a" },
+      { "title": "Social Habits", "audioUrl": "7c4.m4a" }
+    ]
+  },
+  {
+    "id": "8",
+    "title": "Cooking Made Simple",
+    "author": "Julia Child",
+    "coverImage": "https://covers.openlibrary.org/b/id/10982258-L.jpg",
+    "description": "Easy recipes and kitchen tips for beginners and experts alike.",
+    "bookmarked": true,
+    "chapters": [
+      { "title": "Kitchen Essentials", "audioUrl": "8c1.m4a" },
+      { "title": "Simple Breakfasts", "audioUrl": "8c2.m4a" },
+      { "title": "Quick Lunches", "audioUrl": "8c3.m4a" },
+      { "title": "Delicious Dinners", "audioUrl": "8c4.m4a" },
+      { "title": "Desserts", "audioUrl": "8c5.m4a" }
+    ]
+  },
+  {
+    "id": "9",
+    "title": "World Mythology",
+    "author": "Rick Riordan",
+    "coverImage": "https://covers.openlibrary.org/b/id/10523359-L.jpg",
+    "description": "Explore myths and legends from cultures around the globe.",
+    "bookmarked": false,
+    "chapters": [
+      { "title": "Greek Myths", "audioUrl": "9c1.m4a" },
+      { "title": "Norse Legends", "audioUrl": "9c2.m4a" },
+      { "title": "Egyptian Stories", "audioUrl": "9c3.m4a" },
+      { "title": "Asian Folklore", "audioUrl": "9c4.m4a" }
+    ]
+  },
+  {
+    "id": "10",
+    "title": "Financial Freedom",
+    "author": "Robert Kiyosaki",
+    "coverImage": "https://covers.openlibrary.org/b/id/10982259-L.jpg",
+    "description": "Strategies and advice for achieving financial independence.",
+    "bookmarked": true,
+    "chapters": [
+      { "title": "Building Wealth", "audioUrl": "10c1.m4a" },
+      { "title": "Investing Basics", "audioUrl": "10c2.m4a" },
+      { "title": "Passive Income", "audioUrl": "10c3.m4a" },
+      { "title": "Financial Planning", "audioUrl": "10c4.m4a" },
+      { "title": "Retirement", "audioUrl": "10c5.m4a" }
     ]
   }
 ]

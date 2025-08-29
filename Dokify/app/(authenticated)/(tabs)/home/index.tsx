@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { useSharedAudioPlayer } from "@/context/audioprovider";
+
 import {
   StyleSheet,
   FlatList,
@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 type Audiobook = {
@@ -37,32 +36,16 @@ const Index = () => {
   const [audioBooks, setAudioBooks] = useState<Audiobook[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const bookBgColor = useThemeColor(
-    { light: "#000000", dark: "#ffffff" },
+  const cardBgColor = useThemeColor(
+    { light: "#fff", dark: "#151718" },
     "background",
   );
-  const iconColor = useThemeColor({ light: "#fff", dark: "#000" }, "text");
-  const {
-    setAudiourl,
-    audiourl,
-    player,
-    status,
-    setAudiotitle,
-    setCurrentBook,
-  } = useSharedAudioPlayer();
-  const [requestedUrl, setRequestedUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (
-      requestedUrl &&
-      status?.isLoaded &&
-      // FIX: Remove status.audioUrl (diagnostic error: Property 'audioUrl' does not exist on type 'AudioStatus')
-      !status?.playing
-    ) {
-      player.play();
-      setRequestedUrl(null); // Reset after playing
-    }
-  }, [requestedUrl, status, player]);
+  // Soft border color to match generate.tsx, more visible in dark mode
+  const cardBorderColor = useThemeColor(
+    { light: "#e0e4ea", dark: "#3a3d42" },
+    "background",
+  );
+  const cardTextColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
 
   // Fetch audiobooks from backend API (updated to use correct endpoint and data structure)
   const fetchAudioBooks = () => {
@@ -106,11 +89,12 @@ const Index = () => {
       <FlatList
         data={audioBooks}
         keyExtractor={(book) => book.id}
+        numColumns={2}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           audioBooks.length > 0 ? (
             <ThemedText type="subtitle" style={{ marginBottom: 30 }}>
-              Audio Books:
+              Library
             </ThemedText>
           ) : null
         }
@@ -150,123 +134,55 @@ const Index = () => {
         contentContainerStyle={
           audioBooks.length === 0
             ? { flex: 1, justifyContent: "center", alignItems: "center" }
-            : { paddingBottom: 70 }
+            : { paddingBottom: 80 }
         }
-        renderItem={({ item: book }) => {
-          const isCurrentBook = audiourl === book.audioUrl;
-          const isPlaying = isCurrentBook && status?.playing;
-
-          return (
-            <TouchableOpacity
-              style={[styles.bookcontainer, { backgroundColor: bookBgColor }]}
-              activeOpacity={0.8}
-              onPress={() => {
-                router.push("/(authenticated)/(tabs)/home/bookdetails");
-              }}
-            >
-              <MaterialIcons
-                style={styles.bookmarkicon}
-                name={book.bookmarked ? "bookmark" : "bookmark-border"}
-                size={24}
-                color={iconColor}
+        columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
+        renderItem={({ item: book }) => (
+          <TouchableOpacity
+            style={[
+              styles.bookcontainer,
+              {
+                backgroundColor: cardBgColor,
+                borderColor: cardBorderColor,
+                borderWidth: 1,
+                flex: 1,
+                marginHorizontal: 4,
+                marginVertical: 6,
+                maxWidth: "49%",
+              },
+            ]}
+            activeOpacity={0.85}
+            onPress={() => {
+              router.push({
+                pathname: "/(authenticated)/(tabs)/home/bookdetails",
+                params: { book: JSON.stringify(book) },
+              });
+            }}
+          >
+            <View>
+              <Image
+                style={styles.coverImage}
+                source={{ uri: book.coverImage }}
               />
-              <View style={styles.playIcon}>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (!isCurrentBook) {
-                      setAudiourl(book.audioUrl);
-                      setAudiotitle(book.title);
-                      setRequestedUrl(book.audioUrl);
-                      if (typeof setCurrentBook === "function")
-                        setCurrentBook(book);
-                    } else {
-                      if (isPlaying) {
-                        player.pause();
-                      } else {
-                        player.play();
-                      }
-                    }
-                  }}
+              <View style={styles.infoContainer}>
+                <ThemedText
+                  type="buttonText"
+                  numberOfLines={1}
+                  style={[styles.bookTitle, { color: cardTextColor }]}
                 >
-                  <Ionicons
-                    name={isPlaying ? "pause-circle" : "play-circle"}
-                    size={40}
-                    color={iconColor}
-                  />
-                </TouchableOpacity>
+                  {book.title}
+                </ThemedText>
+                <ThemedText
+                  type="buttonText"
+                  numberOfLines={1}
+                  style={[styles.bookAuthor, { color: cardTextColor }]}
+                >
+                  ~ {book.author}
+                </ThemedText>
               </View>
-              <View style={styles.bookRow}>
-                <View style={{ alignItems: "center" }}>
-                  <Image
-                    style={styles.coverImage}
-                    source={{
-                      uri: book.coverImage,
-                    }}
-                  />
-                  <ThemedText
-                    type="buttonText"
-                    style={{
-                      fontSize: 12,
-                      marginTop: 6,
-                      textAlign: "center",
-                    }}
-                  >
-                    {book.duration}
-                  </ThemedText>
-                </View>
-                <View style={styles.infoContainer}>
-                  <ThemedText
-                    type="buttonText"
-                    numberOfLines={1}
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "bold",
-                      marginBottom: 4,
-                    }}
-                  >
-                    {book.title}
-                  </ThemedText>
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      borderBottomColor: "#eee",
-                      marginVertical: 6,
-                    }}
-                  />
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <ThemedText
-                      type="buttonText"
-                      style={{
-                        fontSize: 14,
-                        marginBottom: 6,
-                        flex: 1,
-                      }}
-                      numberOfLines={2}
-                    >
-                      {book.description}
-                    </ThemedText>
-                  </View>
-                  <ThemedText
-                    type="buttonText"
-                    style={{
-                      fontSize: 14,
-                      marginTop: 6,
-                      fontStyle: "italic",
-                    }}
-                  >
-                    ~ {book.author}
-                  </ThemedText>
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
+            </View>
+          </TouchableOpacity>
+        )}
         refreshing={loading}
         onRefresh={fetchAudioBooks}
       />
@@ -293,42 +209,45 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   bookcontainer: {
-    padding: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    marginTop: 10,
-    marginBottom: 15,
-    // backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  bookRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 16,
+    flex: 1,
+    padding: 10,
+    borderRadius: 12, // softer corners
+    borderWidth: 1.5,
+    // borderColor set inline in component
+    marginHorizontal: 4,
+    marginVertical: 6,
+    maxWidth: "49%",
   },
   coverImage: {
-    width: 80,
-    height: 100,
-    borderRadius: 8,
-    marginRight: 14,
-    backgroundColor: "#eee",
+    width: "100%",
+    aspectRatio: 0.75,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    marginBottom: 8,
   },
   infoContainer: {
-    flex: 1,
-    justifyContent: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 2,
-    paddingRight: 20,
+    paddingHorizontal: 2,
   },
-  playIcon: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    zIndex: 2,
+  bookTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 2,
+    textAlign: "center",
+  },
+  bookAuthor: {
+    fontSize: 13,
+    marginBottom: 2,
+    textAlign: "center",
+  },
+  bookDescription: {
+    fontSize: 13,
+    marginTop: 2,
+    marginBottom: 4,
+    lineHeight: 18,
+    letterSpacing: 0.1,
   },
 });
 
