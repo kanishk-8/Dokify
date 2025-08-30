@@ -30,6 +30,13 @@ export default function Player() {
   );
   const iconColor = useThemeColor({ light: "black", dark: "white" }, "tint");
 
+  // Go back if no audio is playing
+  React.useEffect(() => {
+    if (!audiotitle && !currentBook) {
+      sheetRef.current?.close();
+    }
+  }, [audiotitle, currentBook, router]);
+
   // Helper to format seconds as mm:ss
   function formatTime(seconds: number) {
     const mins = Math.floor(seconds / 60);
@@ -54,20 +61,9 @@ export default function Player() {
       index={0}
       enablePanDownToClose={true}
       onChange={handleSheetChanges}
-      style={[{ backgroundColor }]}
-      containerStyle={{
-        flex: 1,
-      }}
-      backgroundStyle={{
-        backgroundColor,
-        borderTopWidth: 0,
-        borderTopColor: "transparent",
-        elevation: 0,
-        shadowColor: "transparent",
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0,
-        shadowRadius: 0,
-      }}
+      style={[styles.sheet, { backgroundColor }]}
+      containerStyle={{ flex: 1 }}
+      backgroundStyle={{ borderColor: "transparent", backgroundColor }}
       topInset={0}
       animationConfigs={{ duration: 150 }}
       handleComponent={() => null} // optional, cleaner look
@@ -164,29 +160,36 @@ export default function Player() {
 }
 
 const styles = StyleSheet.create({
+  sheet: {
+    flex: 1,
+    shadowColor: "transparent",
+    borderTopWidth: 0,
+  },
   full: {
     flex: 1,
     zIndex: 100,
     height: "100%",
+    paddingHorizontal: 20,
     alignItems: "center",
     paddingTop: 90,
   },
   coverImage: {
-    width: "80%",
+    width: "90%",
     aspectRatio: 1,
     borderRadius: 10,
     marginBottom: 20,
   },
   slider: {
-    width: "90%",
-    height: 40,
+    width: "100%",
+    marginTop: 40,
+    height: 10,
     marginVertical: 0,
   },
   timerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "90%",
+    width: "95%",
     marginTop: 4,
     marginBottom: 8,
   },

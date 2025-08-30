@@ -4,21 +4,82 @@ import {
   View,
   Image,
   ActivityIndicator,
+  PanResponder,
+  Animated,
 } from "react-native";
 import { useSharedAudioPlayer } from "../context/audioprovider";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useRouter } from "expo-router";
 import TextTicker from "react-native-text-ticker";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ThemedText } from "@/components/ThemedText";
 
 // Removed getAudioTitle helper, will use audiotitle from context
 
 export default function Player() {
   const router = useRouter();
-  const { player, status, audiotitle, currentBook } = useSharedAudioPlayer();
+  const {
+    player,
+    status,
+    audiotitle,
+    audiourl,
+    currentBook,
+    setAudiourl,
+    setAudiotitle,
+    setCurrentBook,
+  } = useSharedAudioPlayer();
   const playerOpenedRef = useRef(false);
+
+  // Animated value for slide-down
+  const translateY = useRef(new Animated.Value(0)).current;
+
+  // Reset translateY when miniplayer is shown
+  useEffect(() => {
+    if (audiourl) {
+      translateY.setValue(0);
+    }
+  }, [audiourl, translateY]);
+
+  // PanResponder for swipe down to stop and remove audio with animation
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) =>
+        Math.abs(gestureState.dy) > 10,
+      onPanResponderMove: (_, gestureState) => {
+        // Clamp drag to ±40px
+        const maxDrag = 40;
+        const minDrag = -40;
+        const clampedDy = Math.max(minDrag, Math.min(maxDrag, gestureState.dy));
+        translateY.setValue(clampedDy);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 50) {
+          // Animate out, then remove audio
+          Animated.timing(translateY, {
+            toValue: 200,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            player.pause();
+            setAudiourl(null);
+            setAudiotitle(null);
+            setCurrentBook(null);
+          });
+        } else if (gestureState.dy < -50) {
+          // Snap back instantly and open full player
+          translateY.setValue(0);
+          handleOpenPlayer();
+        } else {
+          // Snap back to original position
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    }),
+  ).current;
 
   const handleOpenPlayer = () => {
     if (!playerOpenedRef.current) {
@@ -76,7 +137,13 @@ export default function Player() {
   };
 
   return (
-    <View style={[styles.mini, { backgroundColor, borderColor }]}>
+    <Animated.View
+      {...panResponder.panHandlers}
+      style={[
+        styles.mini,
+        { backgroundColor, borderColor, transform: [{ translateY }] },
+      ]}
+    >
       <TouchableOpacity
         style={{
           flexDirection: "row",
@@ -207,7 +274,7 @@ export default function Player() {
           )}
         </TouchableOpacity>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
