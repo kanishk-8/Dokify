@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useSharedAudioPlayer } from "@/context/audioprovider";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 const BookDetails = () => {
   const {
@@ -26,6 +26,7 @@ const BookDetails = () => {
   const iconColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
   const backendUrl = process.env.EXPO_PUBLIC_BACKENDURL;
   const params = useLocalSearchParams();
+  const router = useRouter();
   // Contrasting colors for chapters list
   const chapterCardBg = useThemeColor(
     { light: "#fff", dark: "#151718" },
@@ -80,6 +81,14 @@ const BookDetails = () => {
 
   return (
     <ThemedView style={styles.container}>
+      {/* Back Button */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.back()}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="chevron-back-circle" size={40} color={iconColor} />
+      </TouchableOpacity>
       {/* Chapters List */}
       {book.chapters && book.chapters.length > 0 && (
         <View style={styles.chaptersContainer}>
@@ -335,6 +344,15 @@ const styles = StyleSheet.create({
   playChapterButton: {
     marginLeft: 16,
     padding: 4,
+  },
+  backButton: {
+    position: "absolute",
+    top: 40,
+    left: 8,
+    zIndex: 10,
+    backgroundColor: "transparent",
+    padding: 6,
+    borderRadius: 20,
   },
 });
 

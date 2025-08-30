@@ -22,9 +22,9 @@ const GenerateAudioBook = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // Theme color for icons
   const iconColor = useThemeColor({ light: "#222", dark: "#fff" }, "text");
 
+  const cardTextColor = useThemeColor({ light: "#000", dark: "#fff" }, "text");
   // Animated values
   const uploadScale = useSharedValue(1);
   const uploadOpacity = useSharedValue(1);
@@ -96,9 +96,9 @@ const GenerateAudioBook = () => {
 
       formData.append("file", {
         uri: selectedFile.uri,
-        type: selectedFile.mimeType || "application/octet-stream",
         name: selectedFile.name,
-      });
+        type: selectedFile.mimeType || "application/octet-stream",
+      } as any);
       formData.append("protagonist", "John Doe"); // You can make this dynamic
       formData.append("single_voice", "true"); // Or "false" for multi-voice
       formData.append("output_format", "m4a"); // Or "mp3", "m4b"
@@ -122,7 +122,7 @@ const GenerateAudioBook = () => {
       clearInterval(progressInterval);
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         setUploadProgress(100);
         // Optionally show result.message or result.audio_path
         // alert(result.message);
@@ -185,7 +185,18 @@ const GenerateAudioBook = () => {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="subtitle">Generate AudioBook</ThemedText>
-
+      <View
+        style={[
+          {
+            height: 4,
+            width: 78,
+            borderRadius: 2,
+            marginBottom: 8,
+            marginTop: 4,
+          },
+          { backgroundColor: cardTextColor },
+        ]}
+      />
       <ThemedView style={{ marginTop: 20 }}>
         {!selectedFile && (
           <ThemedView style={styles.bulletin}>

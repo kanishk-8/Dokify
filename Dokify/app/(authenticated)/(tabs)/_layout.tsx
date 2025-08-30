@@ -15,7 +15,7 @@ import { useSharedAudioPlayer } from "@/context/audioprovider";
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { audiourl } = useSharedAudioPlayer();
-  console.log("audiourl now", audiourl);
+  // console.log("audiourl now", audiourl);
 
   return (
     <>
@@ -24,9 +24,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: false,
           tabBarButton: HapticTab,
+          tabBarIconStyle: { marginTop: 6 },
           tabBarStyle: {
             height: 70,
-            paddingBottom: 8,
             paddingTop: 8,
           },
         }}
@@ -38,7 +38,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color, focused }) => (
               <MaterialCommunityIcons
                 name="book-music"
-                size={focused ? 28 : 26}
+                size={focused ? 26 : 24}
                 color={color}
               />
             ),
@@ -51,7 +51,7 @@ export default function TabLayout() {
             tabBarIcon: ({ color, focused }) => (
               <FontAwesome6
                 name="wand-magic-sparkles"
-                size={focused ? 28 : 26}
+                size={focused ? 26 : 24}
                 color={color}
               />
             ),
@@ -62,7 +62,7 @@ export default function TabLayout() {
           options={{
             title: "Settings",
             tabBarIcon: ({ color, focused }) => (
-              <Feather name="settings" size={focused ? 28 : 26} color={color} />
+              <Feather name="settings" size={focused ? 26 : 24} color={color} />
             ),
           }}
         />

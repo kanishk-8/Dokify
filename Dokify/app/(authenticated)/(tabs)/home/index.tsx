@@ -93,9 +93,21 @@ const Index = () => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           audioBooks.length > 0 ? (
-            <ThemedText type="subtitle" style={{ marginBottom: 30 }}>
-              Library
-            </ThemedText>
+            <>
+              <ThemedText type="subtitle">Library</ThemedText>
+              <View
+                style={[
+                  {
+                    height: 4,
+                    width: 78,
+                    marginTop: 4,
+                    borderRadius: 2,
+                    marginBottom: 8,
+                  },
+                  { backgroundColor: cardTextColor },
+                ]}
+              />
+            </>
           ) : null
         }
         ListEmptyComponent={
@@ -134,7 +146,7 @@ const Index = () => {
         contentContainerStyle={
           audioBooks.length === 0
             ? { flex: 1, justifyContent: "center", alignItems: "center" }
-            : { paddingBottom: 80 }
+            : { paddingBottom: 80, paddingTop: 40 }
         }
         columnWrapperStyle={{ justifyContent: "space-between", gap: 10 }}
         renderItem={({ item: book }) => (
@@ -193,7 +205,7 @@ const Index = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 80,
+    paddingTop: 40,
     paddingHorizontal: 20,
   },
   noAudioBooks: {

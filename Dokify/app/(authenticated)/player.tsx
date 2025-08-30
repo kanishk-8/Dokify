@@ -54,8 +54,20 @@ export default function Player() {
       index={0}
       enablePanDownToClose={true}
       onChange={handleSheetChanges}
-      style={[styles.sheet, { backgroundColor }]}
-      containerStyle={{ flex: 1 }}
+      style={[{ backgroundColor }]}
+      containerStyle={{
+        flex: 1,
+      }}
+      backgroundStyle={{
+        backgroundColor,
+        borderTopWidth: 0,
+        borderTopColor: "transparent",
+        elevation: 0,
+        shadowColor: "transparent",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
+      }}
       topInset={0}
       animationConfigs={{ duration: 150 }}
       handleComponent={() => null} // optional, cleaner look
@@ -152,11 +164,6 @@ export default function Player() {
 }
 
 const styles = StyleSheet.create({
-  sheet: {
-    flex: 1,
-    shadowColor: "transparent",
-    borderTopWidth: 0,
-  },
   full: {
     flex: 1,
     zIndex: 100,

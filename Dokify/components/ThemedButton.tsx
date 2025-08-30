@@ -15,7 +15,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
   darkColor?: string;
   textLightColor?: string;
   textDarkColor?: string;
-  variant?: "primary" | "secondary" | "outline" | "ghost";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "opposite";
   size?: "small" | "medium" | "large";
   fullWidth?: boolean;
 };
@@ -64,6 +64,13 @@ export function ThemedButton({
           dark: darkColor || "transparent",
           textLight: textLightColor || Colors.light.text, // #11181C
           textDark: textDarkColor || Colors.dark.text, // #ECEDEE
+        };
+      case "opposite":
+        return {
+          light: lightColor || "#fff",
+          dark: darkColor || "#000",
+          textLight: textLightColor || "#000",
+          textDark: textDarkColor || "#fff",
         };
       default:
         return {

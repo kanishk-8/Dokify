@@ -48,9 +48,21 @@ export function AudioPlayerProvider({
 
   useEffect(() => {
     (async () => {
-      await setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({
+        shouldPlayInBackground: true, // Enables background play
+        interruptionMode: "duckOthers",
+      });
     })();
   }, []);
+
+  // Hide miniplayer when audio finishes
+  useEffect(() => {
+    if (status && status.duration && status.currentTime >= status.duration) {
+      setAudiourl(null);
+      setAudiotitle(null);
+      setCurrentBook(null);
+    }
+  }, [status]);
 
   return (
     <AudioPlayerContext.Provider
