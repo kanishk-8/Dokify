@@ -7,11 +7,26 @@
     "description": "A beginner's guide to the world of programming and software development.",
     "bookmarked": false,
     "chapters": [
-      { "title": "Introduction to Programming", "audioUrl": "1c1.m4a" },
-      { "title": "Variables and Data Types", "audioUrl": "1c2.m4a" },
-      { "title": "Control Structures", "audioUrl": "1c3.m4a" },
-      { "title": "Functions and Modules", "audioUrl": "1c4.m4a" },
-      { "title": "Debugging Techniques", "audioUrl": "1c5.m4a" }
+      {
+        "title": "Introduction to Programming",
+        "audioUrl": "1c1.m4a"
+      },
+      {
+        "title": "Variables and Data Types",
+        "audioUrl": "1c2.m4a"
+      },
+      {
+        "title": "Control Structures",
+        "audioUrl": "1c3.m4a"
+      },
+      {
+        "title": "Functions and Modules",
+        "audioUrl": "1c4.m4a"
+      },
+      {
+        "title": "Debugging Techniques",
+        "audioUrl": "1c5.m4a"
+      }
     ]
   },
   {
@@ -22,10 +37,22 @@
     "description": "Explore the mysteries of the universe and the wonders of space travel.",
     "bookmarked": true,
     "chapters": [
-      { "title": "The Solar System", "audioUrl": "2c1.m4a" },
-      { "title": "Beyond the Milky Way", "audioUrl": "2c2.m4a" },
-      { "title": "Black Holes", "audioUrl": "2c3.m4a" },
-      { "title": "Space Exploration", "audioUrl": "2c4.m4a" }
+      {
+        "title": "The Solar System",
+        "audioUrl": "2c1.m4a"
+      },
+      {
+        "title": "Beyond the Milky Way",
+        "audioUrl": "2c2.m4a"
+      },
+      {
+        "title": "Black Holes",
+        "audioUrl": "2c3.m4a"
+      },
+      {
+        "title": "Space Exploration",
+        "audioUrl": "2c4.m4a"
+      }
     ]
   },
   {
@@ -36,11 +63,26 @@
     "description": "Techniques and stories to help you live a more mindful and peaceful life.",
     "bookmarked": false,
     "chapters": [
-      { "title": "What is Mindfulness?", "audioUrl": "3c1.m4a" },
-      { "title": "Breathing Exercises", "audioUrl": "3c2.m4a" },
-      { "title": "Daily Practices", "audioUrl": "3c3.m4a" },
-      { "title": "Mindful Eating", "audioUrl": "3c4.m4a" },
-      { "title": "Overcoming Stress", "audioUrl": "3c5.m4a" }
+      {
+        "title": "What is Mindfulness?",
+        "audioUrl": "3c1.m4a"
+      },
+      {
+        "title": "Breathing Exercises",
+        "audioUrl": "3c2.m4a"
+      },
+      {
+        "title": "Daily Practices",
+        "audioUrl": "3c3.m4a"
+      },
+      {
+        "title": "Mindful Eating",
+        "audioUrl": "3c4.m4a"
+      },
+      {
+        "title": "Overcoming Stress",
+        "audioUrl": "3c5.m4a"
+      }
     ]
   },
   {
@@ -51,12 +93,30 @@
     "description": "Unlock the secrets to better sleep and improved health.",
     "bookmarked": true,
     "chapters": [
-      { "title": "Understanding Sleep Cycles", "audioUrl": "4c1.m4a" },
-      { "title": "Common Sleep Disorders", "audioUrl": "4c2.m4a" },
-      { "title": "Tips for Better Sleep", "audioUrl": "4c3.m4a" },
-      { "title": "Sleep and Mental Health", "audioUrl": "4c4.m4a" },
-      { "title": "Sleep Technology", "audioUrl": "4c5.m4a" },
-      { "title": "Q&A and Myths", "audioUrl": "4c6.m4a" }
+      {
+        "title": "Understanding Sleep Cycles",
+        "audioUrl": "4c1.m4a"
+      },
+      {
+        "title": "Common Sleep Disorders",
+        "audioUrl": "4c2.m4a"
+      },
+      {
+        "title": "Tips for Better Sleep",
+        "audioUrl": "4c3.m4a"
+      },
+      {
+        "title": "Sleep and Mental Health",
+        "audioUrl": "4c4.m4a"
+      },
+      {
+        "title": "Sleep Technology",
+        "audioUrl": "4c5.m4a"
+      },
+      {
+        "title": "Q&A and Myths",
+        "audioUrl": "4c6.m4a"
+      }
     ]
   },
   {
@@ -67,12 +127,30 @@
     "description": "Discover the inventions that changed the world.",
     "bookmarked": false,
     "chapters": [
-      { "title": "The Wheel", "audioUrl": "5c1.m4a" },
-      { "title": "Printing Press", "audioUrl": "5c2.m4a" },
-      { "title": "Electricity", "audioUrl": "5c3.m4a" },
-      { "title": "Telephone", "audioUrl": "5c4.m4a" },
-      { "title": "Internet", "audioUrl": "5c5.m4a" },
-      { "title": "Modern Medicine", "audioUrl": "5c6.m4a" }
+      {
+        "title": "The Wheel",
+        "audioUrl": "5c1.m4a"
+      },
+      {
+        "title": "Printing Press",
+        "audioUrl": "5c2.m4a"
+      },
+      {
+        "title": "Electricity",
+        "audioUrl": "5c3.m4a"
+      },
+      {
+        "title": "Telephone",
+        "audioUrl": "5c4.m4a"
+      },
+      {
+        "title": "Internet",
+        "audioUrl": "5c5.m4a"
+      },
+      {
+        "title": "Modern Medicine",
+        "audioUrl": "5c6.m4a"
+      }
     ]
   },
   {
@@ -83,11 +161,26 @@
     "description": "Stories and tips for exploring the great outdoors.",
     "bookmarked": true,
     "chapters": [
-      { "title": "Mountain Hiking", "audioUrl": "6c1.m4a" },
-      { "title": "Camping Essentials", "audioUrl": "6c2.m4a" },
-      { "title": "Wildlife Encounters", "audioUrl": "6c3.m4a" },
-      { "title": "Survival Skills", "audioUrl": "6c4.m4a" },
-      { "title": "Nature Photography", "audioUrl": "6c5.m4a" }
+      {
+        "title": "Mountain Hiking",
+        "audioUrl": "6c1.m4a"
+      },
+      {
+        "title": "Camping Essentials",
+        "audioUrl": "6c2.m4a"
+      },
+      {
+        "title": "Wildlife Encounters",
+        "audioUrl": "6c3.m4a"
+      },
+      {
+        "title": "Survival Skills",
+        "audioUrl": "6c4.m4a"
+      },
+      {
+        "title": "Nature Photography",
+        "audioUrl": "6c5.m4a"
+      }
     ]
   },
   {
@@ -98,10 +191,22 @@
     "description": "Learn how habits are formed and how to change them for a better life.",
     "bookmarked": false,
     "chapters": [
-      { "title": "The Habit Loop", "audioUrl": "7c1.m4a" },
-      { "title": "Craving and Reward", "audioUrl": "7c2.m4a" },
-      { "title": "Changing Habits", "audioUrl": "7c3.m4a" },
-      { "title": "Social Habits", "audioUrl": "7c4.m4a" }
+      {
+        "title": "The Habit Loop",
+        "audioUrl": "7c1.m4a"
+      },
+      {
+        "title": "Craving and Reward",
+        "audioUrl": "7c2.m4a"
+      },
+      {
+        "title": "Changing Habits",
+        "audioUrl": "7c3.m4a"
+      },
+      {
+        "title": "Social Habits",
+        "audioUrl": "7c4.m4a"
+      }
     ]
   },
   {
@@ -112,11 +217,26 @@
     "description": "Easy recipes and kitchen tips for beginners and experts alike.",
     "bookmarked": true,
     "chapters": [
-      { "title": "Kitchen Essentials", "audioUrl": "8c1.m4a" },
-      { "title": "Simple Breakfasts", "audioUrl": "8c2.m4a" },
-      { "title": "Quick Lunches", "audioUrl": "8c3.m4a" },
-      { "title": "Delicious Dinners", "audioUrl": "8c4.m4a" },
-      { "title": "Desserts", "audioUrl": "8c5.m4a" }
+      {
+        "title": "Kitchen Essentials",
+        "audioUrl": "8c1.m4a"
+      },
+      {
+        "title": "Simple Breakfasts",
+        "audioUrl": "8c2.m4a"
+      },
+      {
+        "title": "Quick Lunches",
+        "audioUrl": "8c3.m4a"
+      },
+      {
+        "title": "Delicious Dinners",
+        "audioUrl": "8c4.m4a"
+      },
+      {
+        "title": "Desserts",
+        "audioUrl": "8c5.m4a"
+      }
     ]
   },
   {
@@ -127,10 +247,22 @@
     "description": "Explore myths and legends from cultures around the globe.",
     "bookmarked": false,
     "chapters": [
-      { "title": "Greek Myths", "audioUrl": "9c1.m4a" },
-      { "title": "Norse Legends", "audioUrl": "9c2.m4a" },
-      { "title": "Egyptian Stories", "audioUrl": "9c3.m4a" },
-      { "title": "Asian Folklore", "audioUrl": "9c4.m4a" }
+      {
+        "title": "Greek Myths",
+        "audioUrl": "9c1.m4a"
+      },
+      {
+        "title": "Norse Legends",
+        "audioUrl": "9c2.m4a"
+      },
+      {
+        "title": "Egyptian Stories",
+        "audioUrl": "9c3.m4a"
+      },
+      {
+        "title": "Asian Folklore",
+        "audioUrl": "9c4.m4a"
+      }
     ]
   },
   {
@@ -141,11 +273,40 @@
     "description": "Strategies and advice for achieving financial independence.",
     "bookmarked": true,
     "chapters": [
-      { "title": "Building Wealth", "audioUrl": "10c1.m4a" },
-      { "title": "Investing Basics", "audioUrl": "10c2.m4a" },
-      { "title": "Passive Income", "audioUrl": "10c3.m4a" },
-      { "title": "Financial Planning", "audioUrl": "10c4.m4a" },
-      { "title": "Retirement", "audioUrl": "10c5.m4a" }
+      {
+        "title": "Building Wealth",
+        "audioUrl": "10c1.m4a"
+      },
+      {
+        "title": "Investing Basics",
+        "audioUrl": "10c2.m4a"
+      },
+      {
+        "title": "Passive Income",
+        "audioUrl": "10c3.m4a"
+      },
+      {
+        "title": "Financial Planning",
+        "audioUrl": "10c4.m4a"
+      },
+      {
+        "title": "Retirement",
+        "audioUrl": "10c5.m4a"
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "title": "The Adventure of the Lost Treasure",
+    "author": "Prakhar Sharma",
+    "coverImage": "covers/The%20Adventure%20of%20the%20Lost%20Treasure%20-%20Prakhar%20Sharma_cover.jpg",
+    "description": "",
+    "bookmarked": false,
+    "chapters": [
+      {
+        "title": "The Adventure of the Lost Treasure",
+        "audioUrl": "audiobook.m4a"
+      }
     ]
   }
 ]

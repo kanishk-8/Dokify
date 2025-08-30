@@ -5,6 +5,11 @@ import os
 import shutil
 import asyncio
 
+# PDF metadata and cover extraction
+from PyPDF2 import PdfReader
+from pdf2image import convert_from_path
+
+
 # Import your own processing functions - adjust imports as needed
 from book_to_txt import process_book_and_extract_text, save_book
 from identify_character import process_book_and_identify_characters
@@ -68,15 +73,48 @@ async def run_audio_generation(
 async def generate_audiobook_pipeline(
     file_path: str,
     protagonist_name: str = "John Doe",
-    single_voice: bool = True,
+    single_voice: bool = False,
     output_format: str = "m4a",
 ) -> str:
+    # 0. Extract PDF metadata and cover image
+    def extract_pdf_metadata(pdf_path):
+        try:
+            reader = PdfReader(pdf_path)
+            info = reader.metadata or {}
+            title = getattr(info, 'title', None) or os.path.splitext(os.path.basename(pdf_path))[0]
+            author = getattr(info, 'author', None) or "Unknown Author"
+            return title, author
+        except Exception:
+            return os.path.splitext(os.path.basename(pdf_path))[0], "Unknown Author"
+
+    def extract_cover_image(pdf_path, output_dir="covers"):
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+            images = convert_from_path(pdf_path, first_page=1, last_page=1)
+            if images:
+                cover_path = os.path.join(output_dir, os.path.splitext(os.path.basename(pdf_path))[0] + "_cover.jpg")
+                images[0].save(cover_path, "JPEG")
+                return cover_path
+        except Exception:
+            pass
+        # fallback placeholder
+        return "https://covers.openlibrary.org/b/id/8231856-L.jpg"
+
+    title, author = extract_pdf_metadata(file_path)
+    cover_image_path = extract_cover_image(file_path)
+    # If local cover, serve via static endpoint or use as is
+    if cover_image_path.startswith("http"):
+        cover_image_url = cover_image_path
+    else:
+        # You may want to serve this via FastAPI static files, for now just use the path
+        cover_image_url = cover_image_path
+
     # 1. Extract text from book
     converted_text_path = await run_text_extraction(file_path)
 
     # 2. Identify characters (skip if single voice)
     if not single_voice:
-        await run_character_identification(protagonist_name)
+        await run_character_identification(converted_text_path)
         book_file_for_audio = os.path.join(os.getcwd(), "speaker_attributed_book.jsonl")
     else:
         # Convert plain text to JSONL for single voice, splitting into smaller chunks
@@ -88,7 +126,6 @@ async def generate_audiobook_pipeline(
                 if chunk:
                     # Split into smaller pieces (e.g., 300 chars)
                     for subchunk in textwrap.wrap(chunk, 300):
-                        import json
                         f_out.write(json.dumps({"text": subchunk}) + "\n")
         book_file_for_audio = jsonl_path
 
@@ -100,6 +137,41 @@ async def generate_audiobook_pipeline(
         book_file_path=book_file_for_audio,
         use_emotion_tags=False,
     )
+
+    # 4. Append to audiobooks.json
+    def append_audiobook_entry(audio_file_path, title, author, cover_image_url, description=""):
+        json_path = os.path.join(os.path.dirname(__file__), "audiobooks.json")
+        # Load existing audiobooks
+        if os.path.exists(json_path):
+            with open(json_path, "r", encoding="utf-8") as f:
+                try:
+                    audiobooks = json.load(f)
+                except Exception:
+                    audiobooks = []
+        else:
+            audiobooks = []
+
+        # Generate a new ID
+        new_id = str(len(audiobooks) + 1)
+        # Use filename for chapter audio
+        chapter = {
+            "title": title,
+            "audioUrl": os.path.basename(audio_file_path)
+        }
+        entry = {
+            "id": new_id,
+            "title": title,
+            "author": author,
+            "coverImage": cover_image_url,
+            "description": description,
+            "bookmarked": False,
+            "chapters": [chapter]
+        }
+        audiobooks.append(entry)
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(audiobooks, f, indent=2)
+
+    append_audiobook_entry(audio_file_path, title, author, cover_image_url, description="")
     return audio_file_path
 
 # API endpoints
@@ -108,7 +180,7 @@ async def upload_book(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     protagonist: str = "John Doe",
-    single_voice: bool = True,
+    single_voice: bool = False,
     output_format: str = "m4a",
 ):
     filename = file.filename or "uploaded_book"
@@ -158,5 +230,5 @@ async def get_books():
     if not os.path.exists(json_path):
         raise HTTPException(status_code=404, detail="Book data not found")
     with open(json_path, "r", encoding="utf-8") as f:
-        books = json.load(f)
-    return {"books": books}
+        books_data = json.load(f)
+    return {"books": books_data}
