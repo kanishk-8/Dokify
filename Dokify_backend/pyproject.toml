@@ -3,9 +3,19 @@ name = "dokify-backend"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.116.1",
+    "ffmpeg-python>=0.2.0",
+    "gliner>=0.2.22",
+    "google-genai>=1.32.0",
+    "kittentts",
+    "pydub>=0.25.1",
+    "pypdf2>=3.0.1",
     "python-multipart>=0.0.20",
+    "soundfile>=0.13.1",
     "uvicorn>=0.35.0",
 ]
+
+[tool.uv.sources]
+kittentts = { url = "https://github.com/KittenML/KittenTTS/releases/download/0.1/kittentts-0.1.0-py3-none-any.whl" }

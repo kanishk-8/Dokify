@@ -100,7 +100,7 @@ const GenerateAudioBook = () => {
         type: selectedFile.mimeType || "application/octet-stream",
       } as any);
       formData.append("protagonist", "John Doe"); // You can make this dynamic
-      formData.append("single_voice", "true"); // Or "false" for multi-voice
+      formData.append("single_voice", "false"); // Or "false" for multi-voice
       formData.append("output_format", "m4a"); // Or "mp3", "m4b"
 
       // Simulate progress animation
