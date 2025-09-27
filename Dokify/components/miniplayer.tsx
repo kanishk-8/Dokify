@@ -61,10 +61,23 @@ export default function Player() {
             duration: 200,
             useNativeDriver: true,
           }).start(() => {
-            player.pause();
-            setAudiourl(null);
-            setAudiotitle(null);
-            setCurrentBook(null);
+            try {
+              // Guard calls to native player methods — player may have been released/recreated.
+              if (player && typeof (player as any).pause === "function") {
+                (player as any).pause();
+              }
+            } catch (e) {
+              // Non-fatal: log and continue to clear UI state
+              console.warn(
+                "Failed to pause player in miniplayer swipe handler:",
+                e,
+              );
+            } finally {
+              // Always clear UI state regardless of pause outcome
+              setAudiourl(null);
+              setAudiotitle(null);
+              setCurrentBook(null);
+            }
           });
         } else if (gestureState.dy < -50) {
           // Snap back instantly and open full player
@@ -255,10 +268,19 @@ export default function Player() {
         </View>
         <TouchableOpacity
           onPress={() => {
-            if (status.playing) {
-              player.pause();
-            } else {
-              player.play();
+            try {
+              // Guard player calls — the native player instance can be released and throw.
+              if (status && status.playing) {
+                if (player && typeof (player as any).pause === "function") {
+                  (player as any).pause();
+                }
+              } else {
+                if (player && typeof (player as any).play === "function") {
+                  (player as any).play();
+                }
+              }
+            } catch (e) {
+              console.warn("Audio player action failed in miniplayer:", e);
             }
           }}
           activeOpacity={0.7}

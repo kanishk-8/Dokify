@@ -13,6 +13,7 @@ import {
 import { useSharedAudioPlayer } from "@/context/audioprovider";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useUser } from "@clerk/clerk-expo";
 
 const BookDetails = () => {
   const {
@@ -27,6 +28,8 @@ const BookDetails = () => {
   const backendUrl = process.env.EXPO_PUBLIC_BACKENDURL;
   const params = useLocalSearchParams();
   const router = useRouter();
+  // Get current Clerk user for verification
+  const { user } = useUser();
   // Contrasting colors for chapters list
   const chapterCardBg = useThemeColor(
     { light: "#fff", dark: "#151718" },
@@ -70,6 +73,15 @@ const BookDetails = () => {
     }
     return null;
   }, [params.book]);
+
+  // Debug: log current user id and the book title for verification
+  try {
+    console.log("BookDetails: current user id:", user?.id ?? null);
+    console.log("BookDetails: current book title:", book?.title ?? null);
+  } catch (e) {
+    // avoid crashing the UI if console access is unavailable
+    /* noop */
+  }
 
   if (!book) {
     return (
@@ -139,7 +151,14 @@ const BookDetails = () => {
               </View>
             }
             renderItem={({ item: chapter, index }) => {
-              const chapterAudioUrl = `${backendUrl}/audiobook/${chapter.audioUrl}`;
+              // Use absolute URL from backend if chapter.audioUrl already contains it (http/https).
+              // Otherwise, construct the URL using backendUrl + relative path.
+              const chapterAudioUrl =
+                typeof chapter.audioUrl === "string" &&
+                (chapter.audioUrl.startsWith("http://") ||
+                  chapter.audioUrl.startsWith("https://"))
+                  ? chapter.audioUrl
+                  : `${backendUrl}/audiobook/${chapter.audioUrl}`;
               const isCurrentBook = audiourl === chapterAudioUrl;
               const isPlaying = isCurrentBook && status?.playing;
 

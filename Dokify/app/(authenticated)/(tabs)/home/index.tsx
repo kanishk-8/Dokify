@@ -3,6 +3,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-expo";
 
 import {
   StyleSheet,
@@ -33,6 +34,15 @@ type Audiobook = {
 
 const Index = () => {
   const router = useRouter();
+  const { user } = useUser();
+  // Debug: log current user info for verification (id/email). This helps confirm that only
+  // a logged-in user is being used to filter audiobooks on this screen.
+  console.log(
+    "Home.Index current user:",
+    user
+      ? { id: user.id, email: user.primaryEmailAddress?.emailAddress }
+      : null,
+  );
   const [audioBooks, setAudioBooks] = useState<Audiobook[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -62,11 +72,41 @@ const Index = () => {
       })
       .then((data) => {
         // Use the 'books' array from the backend response
-        // Construct the correct audioUrl for each book
-        const books = (data.books || []).map((book: Audiobook) => ({
-          ...book,
-          audioUrl: `${process.env.EXPO_PUBLIC_BACKENDURL}/audiobook/${book.audioUrl}`,
-        })) as Audiobook[];
+        // Filter to only books which contain chapters generated for this user,
+        // then construct full audio URLs for each chapter.
+        const booksRaw = (data.books || []) as any[];
+        // Debug: log raw books returned by backend before filtering
+        console.log("Home.Index fetched booksRaw:", booksRaw);
+
+        const userId = user?.id || "anonymous";
+        const filtered = booksRaw.filter((book) => {
+          if (!book.chapters) return false;
+          return book.chapters.some(
+            (ch: any) =>
+              typeof ch.audioUrl === "string" &&
+              ch.audioUrl.startsWith(userId + "/"),
+          );
+        });
+
+        // Debug: log which books matched the current user id
+        console.log(
+          "Home.Index filtered (matching userId) count:",
+          filtered.length,
+          "userId:",
+          userId,
+        );
+
+        const books = filtered.map((book: any) => {
+          const chapters = (book.chapters || []).map((ch: any) => ({
+            ...ch,
+            audioUrl: `${process.env.EXPO_PUBLIC_BACKENDURL}/audiobook/${ch.audioUrl}`,
+          }));
+          return { ...book, chapters };
+        }) as Audiobook[];
+
+        // Debug: log final book objects that will be displayed (with resolved audio URLs)
+        console.log("Home.Index books to display:", books);
+
         setAudioBooks(books);
         setError(null);
       })
@@ -81,8 +121,15 @@ const Index = () => {
   };
 
   useEffect(() => {
-    fetchAudioBooks();
-  }, []);
+    // Only fetch audiobooks once we have a logged-in user id.
+    // When user changes (login/logout), refetch accordingly.
+    if (user && user.id) {
+      fetchAudioBooks();
+    } else {
+      // If user not available yet, clear the list to avoid showing others' books.
+      setAudioBooks([]);
+    }
+  }, [user?.id]);
 
   return (
     <ThemedView style={styles.container}>

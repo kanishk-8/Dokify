@@ -16,11 +16,22 @@ import Animated, {
   SlideInDown,
 } from "react-native-reanimated";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useUser } from "@clerk/clerk-expo";
 
 const GenerateAudioBook = () => {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  // get current user so we can attach user id to uploads
+  const { user } = useUser();
+  // Debug: log user presence so we can confirm auth state on the device
+  console.log(
+    "Generate screen current user:",
+    user
+      ? { id: user.id, email: user.primaryEmailAddress?.emailAddress }
+      : null,
+  );
 
   const iconColor = useThemeColor({ light: "#222", dark: "#fff" }, "text");
 
@@ -103,6 +114,9 @@ const GenerateAudioBook = () => {
       formData.append("single_voice", "false"); // Or "false" for multi-voice
       formData.append("output_format", "m4a"); // Or "mp3", "m4b"
 
+      // attach the current user's id so backend can place the generated audiobook under audiobook/{userid}/
+      formData.append("user_id", user?.id || "anonymous");
+
       // Simulate progress animation
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
@@ -114,18 +128,52 @@ const GenerateAudioBook = () => {
         });
       }, 200);
 
-      const response = await fetch("http://192.168.1.11:8000/uploadfile/", {
+      // Log upload start and user info for debugging
+      console.log("Starting audiobook upload:", {
+        fileName: selectedFile?.name,
+        fileSize: selectedFile?.size,
+        userId: user?.id ?? "anonymous",
+      });
+
+      // Use configured backend URL if available, otherwise fall back to local IP
+      const backendBase =
+        (process.env.EXPO_PUBLIC_BACKENDURL &&
+          process.env.EXPO_PUBLIC_BACKENDURL.replace(/\/$/, "")) ||
+        "http://192.168.1.11:8000";
+      const uploadUrl = `${backendBase}/uploadfile/`;
+
+      console.log("Uploading to URL:", uploadUrl);
+
+      // Perform upload
+      const response = await fetch(uploadUrl, {
         method: "POST",
         body: formData,
       });
 
+      // Read response body once and log it (try JSON then text)
+      const respText = await response.text();
+      try {
+        console.log("Upload response (json):", JSON.parse(respText));
+      } catch (e) {
+        console.log("Upload response (text):", respText);
+      }
+      console.log("Upload response status:", response.status);
+
       clearInterval(progressInterval);
 
       if (response.ok) {
-        await response.json();
+        // We already consumed the body above into respText and logged it.
+        // Try to parse it again for structured handling (already logged).
+        let parsed = null;
+        try {
+          parsed = JSON.parse(respText);
+        } catch (e) {
+          parsed = null;
+        }
+        console.log("Upload succeeded. Parsed response:", parsed);
         setUploadProgress(100);
-        // Optionally show result.message or result.audio_path
-        // alert(result.message);
+        // Optionally handle parsed.message or parsed.audio_path here
+
         buttonScale.value = withSpring(1.05, {
           damping: 15,
           stiffness: 300,
@@ -137,8 +185,8 @@ const GenerateAudioBook = () => {
           });
         }, 180);
       } else {
-        const errorText = await response.text();
-        console.error("Upload failed:", response.status, errorText);
+        // respText already contains the body text (or empty). Log it.
+        console.error("Upload failed:", response.status, respText);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -291,11 +339,30 @@ const GenerateAudioBook = () => {
             >
               <ThemedButton
                 onPress={handleGenerate}
-                title={isUploading ? "Generating..." : "Generate"}
+                title={
+                  isUploading
+                    ? "Generating..."
+                    : !user?.id
+                      ? "Sign in to generate"
+                      : "Generate"
+                }
                 fullWidth
-                disabled={isUploading}
+                disabled={isUploading || !user?.id}
                 style={{ marginTop: 20 }}
               />
+              {!user?.id && (
+                <ThemedText
+                  type="default"
+                  style={{
+                    marginTop: 8,
+                    fontSize: 13,
+                    opacity: 0.85,
+                    textAlign: "center",
+                  }}
+                >
+                  You must be signed in to generate audiobooks.
+                </ThemedText>
+              )}
             </Animated.View>
           </Animated.View>
         )}
