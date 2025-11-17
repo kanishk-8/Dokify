@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 16.17.4",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EAS_BUILD_PROFILE": "preview",
+        "EXPO_PUBLIC_BACKENDURL": "https://kanishk-8-dokify-backend.hf.space",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_Y2l2aWwtbGVtbWluZy03MC5jbGVyay5hY2NvdW50cy5kZXYk"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
