@@ -1,0 +1,52 @@
+# Minimal Dockerfile for Hugging Face Spaces
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Essential environment variables
+ENV PYTHONUNBUFFERED=1 \
+    TRANSFORMERS_CACHE=/tmp/cache \
+    HF_HOME=/tmp/cache \
+    SUNO_USE_SMALL_MODELS=True
+
+# Install only essential system packages
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create directories
+RUN mkdir -p /tmp/cache uploads audiobooks covers
+
+# Install core Python packages only
+RUN pip install --no-cache-dir \
+    fastapi==0.104.1 \
+    uvicorn==0.24.0 \
+    python-multipart==0.0.6 \
+    pdfplumber==0.10.3 \
+    PyPDF2==3.0.1 \
+    Pillow==10.1.0 \
+    spacy==3.7.2 \
+    transformers==4.35.2 \
+    torch --index-url https://download.pytorch.org/whl/cpu \
+    numpy==1.25.2 \
+    requests==2.31.0
+
+# Try to install spaCy model (optional)
+RUN python -m spacy download en_core_web_sm || echo "SpaCy model failed"
+
+# Copy only essential files
+COPY main.py app.py audiobooks.json ./
+
+# Create non-root user
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 7860
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s CMD curl -f http://localhost:7860/health || exit 1
+
+# Start app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]

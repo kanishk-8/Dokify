@@ -1,0 +1,43 @@
+# Core FastAPI and server dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# PDF processing
+pdfplumber==0.10.3
+PyPDF2==3.0.1
+pdf2image==1.17.0
+Pillow==10.1.0
+
+# NLP and text processing
+spacy==3.7.2
+transformers==4.35.2
+accelerate==0.24.1
+optimum==1.14.1
+
+# Machine Learning and AI
+torch==2.1.1
+torchaudio==2.1.1
+scipy==1.11.4
+numpy==1.25.2
+
+# Audio processing
+librosa==0.10.1
+soundfile==0.12.1
+pydub==0.25.1
+
+# Gender detection
+gender-guesser==0.4.0
+
+# HTTP client for health checks
+httpx==0.25.2
+
+# Additional dependencies for Bark TTS
+matplotlib==3.8.2
+tqdm==4.66.1
+funcy==2.0
+encodec==0.1.1
+
+# System and utilities
+psutil==5.9.6
+requests==2.31.0

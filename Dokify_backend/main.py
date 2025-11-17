@@ -1,29 +1,29 @@
-from fastapi import (
-    FastAPI,
-    UploadFile,
-    File,
-    BackgroundTasks,
-    HTTPException,
-    Form,
-    Request,
-)
-from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
+import asyncio
+import json
 import os
 import shutil
-import asyncio
 import uuid
-import json
+
+from fastapi import (
+    BackgroundTasks,
+    FastAPI,
+    File,
+    Form,
+    HTTPException,
+    Request,
+    UploadFile,
+)
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pdf2image import convert_from_path
 
 # PDF metadata and cover extraction
 from PyPDF2 import PdfReader
-from pdf2image import convert_from_path
-
 
 # Import your own processing functions - adjust imports as needed
 from book_to_txt import process_book_and_extract_text, save_book
-from identify_character import process_book_and_identify_characters
 from generate_audiobook import process_audiobook_generation
+from identify_character import process_book_and_identify_characters
 
 app = FastAPI()
 
