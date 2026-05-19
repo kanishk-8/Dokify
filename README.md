@@ -1,11 +1,12 @@
 # Dokify
 
-Dokify is an end-to-end prototype for converting books (PDFs) into narrated audiobooks with multi-voice character attribution. It contains two main parts:
+Dokify is an end-to-end prototype for converting books (PDFs) into narrated audiobooks with multi-voice character attribution. It contains three main components:
 
 - `Dokify` — a React Native (Expo) mobile frontend with screens for browsing and generating audiobooks.
-- `Dokify_backend` — a Python FastAPI backend that implements a multi-stage pipeline: PDF text extraction → character identification & voice assignment → speech synthesis → audio concatenation → catalog update.
+- `Dokify_backend` — the standard Python FastAPI backend using GLiNER, Gemini API, and KittenTTS for cloud-assisted generation.
+- `Dokify_backend_alt` — an advanced alternative Python FastAPI backend running entirely local models (Bark TTS, spaCy, DistilBERT) for robust offline processing.
 
-This README documents the project architecture, backend pipeline, frontend structure, data artifacts, and API surface. It intentionally omits any instructions for starting or running the project.
+This README documents the project architecture, both backend pipelines, frontend structure, data artifacts, and API surface. It intentionally omits any instructions for starting or running the project.
 
 ---
 
@@ -13,17 +14,17 @@ This README documents the project architecture, backend pipeline, frontend struc
 
 - User uploads a book (PDF) using the frontend.
 - Backend extracts text from the PDF and converts it to plain text.
-- An NLP step identifies characters, attributes speakers and (optionally) emotions to text chunks, and assigns TTS voices.
+- An NLP step identifies characters, attributes speakers and (optionally) emotions to text chunks, and assigns TTS voices. (Implementation varies between standard and alternate backends).
 - TTS synthesis generates short audio segments per chunk.
-- FFmpeg concatenates segments into a single audiobook file.
+- Audio segments are concatenated into a single audiobook file.
 - The newly created audiobook is added to a local catalog (`audiobooks.json`) and stored in the backend's audio directory.
 - The frontend can list available audiobooks and play them via the shared audio player.
 
 ---
 
-## Backend pipeline (conceptual)
+## Standard Backend pipeline (`Dokify_backend`)
 
-The backend implements a multi-step, largely asynchronous pipeline. The pipeline is expressed in `Dokify_backend/main.py` and composed of smaller modules:
+The standard backend implements a multi-step, largely asynchronous pipeline. The pipeline is expressed in `Dokify_backend/main.py` and composed of smaller modules:
 
 1. PDF metadata & cover extraction
    - Uses `PyPDF2` to read metadata.
@@ -87,6 +88,23 @@ The backend implements a multi-step, largely asynchronous pipeline. The pipeline
   - `audiobooks.json` — local catalog of available audiobooks
   - `single_voice_book.jsonl` — prepared JSONL when single-voice conversion is requested
   - `speaker_attributed_book.jsonl` — output of the character identification step
+
+---
+
+## Alternate Backend pipeline (`Dokify_backend_alt`)
+
+The alternate backend provides a fully local, robust architecture that does not rely on external cloud APIs (like Gemini):
+
+1. **Text extraction**: Uses `pdfplumber` to extract text while attempting to preserve formatting and dialogue markers.
+2. **Character identification & voice assignment**:
+   - Uses local `spaCy` (NER) to detect characters.
+   - Uses `gender-guesser` to intelligently assign male/female voice presets based on character names.
+   - Includes a robust heuristic speaker detection algorithm to attribute dialogue without needing LLMs.
+   - Uses local `DistilBERT` for emotion classification on text chunks.
+3. **TTS synthesis**:
+   - Uses **Bark TTS** for high-quality, fully local multi-voice speech synthesis.
+   - Includes fallback mechanisms to system TTS (`espeak` or `festival`) if Bark fails or runs out of memory.
+4. **Architecture**: Contained within a single, extensive `main.py` orchestrating local models asynchronously.
 
 ---
 
